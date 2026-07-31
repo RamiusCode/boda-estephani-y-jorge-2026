@@ -1,0 +1,55 @@
+---
+// src/components/CodigoVestimenta.astro
+// Banda "Código de vestimenta" + etiqueta formal y nota del color blanco.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const titulo = "Codigo de Vestimenta";
+const etiqueta = "Formal";
+const nota = "El blanco está reservado para la novia";
+// ──────────────────────────────────────────────────────────────
+---
+
+<section class="w-full bg-vino py-8 px-7">
+    <h2
+        class="font-callingstone text-crema text-center text-[1.35rem] tracking-[0.12em]"
+    >
+        {titulo}
+    </h2>
+</section>
+
+<section id="vestimenta" class="w-full px-7 pt-12 pb-14 text-center">
+    <span
+        class="icono icono-marron w-[105px] h-[105px] mx-auto"
+        style="--ic: url('/iconos/vestido-de-novia.png')"
+        aria-hidden="true"></span>
+
+    <h3
+        class="font-callingstone text-marron text-[1.7rem] tracking-[0.1em] mt-5"
+    >
+        {etiqueta}
+    </h3>
+
+    <p class="font-balham text-marron text-[1rem] tracking-wide mt-4">
+        {nota}
+    </p>
+</section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const seccion = document.getElementById("vestimenta");
+        if (!seccion) return;
+
+        gsap.from(seccion.children, {
+            scrollTrigger: { trigger: seccion, start: "top 86%" },
+            opacity: 0,
+            y: 24,
+            duration: 0.9,
+            stagger: 0.15,
+            ease: "power2.out",
+        });
+    });
+</script>

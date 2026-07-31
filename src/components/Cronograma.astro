@@ -1,0 +1,85 @@
+---
+// src/components/Cronograma.astro
+// Banda "Cronograma" + línea de tiempo en zigzag con los momentos del día.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const titulo = "Cronograma";
+
+const momentos = [
+    { nombre: ["Ceremonia", "Civil"], hora: "13:00 P.M.", icono: "iglesia.png" },
+    { nombre: ["Fotos"], hora: "13:30 P.M.", icono: "foto.png" },
+    { nombre: ["Baile"], hora: "14:00 P.M.", icono: "vestido-de-novia.png" },
+    { nombre: ["Brindis"], hora: "14:30 P.M.", icono: "brindis.png" },
+    { nombre: ["Party"], hora: "15:00 P.M.", icono: "musica.png" },
+    { nombre: ["Cena"], hora: "16:00 P.M.", icono: "cena.png" },
+    { nombre: ["Torta"], hora: "17:00 P.M.", icono: "torta.png" },
+    { nombre: ["Party"], hora: "17:30 P.M.", icono: "musica.png" },
+    { nombre: ["Liga y Bouquet"], hora: "19:00 P.M.", icono: "ramo.png" },
+    { nombre: ["Despedida", "Novios"], hora: "21:30 P.M.", icono: "despedida.png" },
+];
+// ──────────────────────────────────────────────────────────────
+---
+
+<section class="w-full bg-vino py-9 px-7">
+    <h2
+        class="font-callingstone text-crema text-center text-[1.35rem] tracking-[0.12em]"
+    >
+        {titulo}
+    </h2>
+</section>
+
+<section class="w-full px-6 pt-12 pb-14">
+    <div class="relative max-w-[330px] mx-auto">
+        <!-- Línea central -->
+        <div
+            class="absolute left-1/2 top-3 bottom-3 w-px border-l border-dashed border-marron/35"
+        >
+        </div>
+
+        {
+            momentos.map((momento, i) => (
+                <div class="momento relative grid grid-cols-2 gap-3 py-3">
+                    <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[7px] h-[7px] rounded-full bg-vino" />
+
+                    <div
+                        class={`flex flex-col items-center text-center ${
+                            i % 2 === 0 ? "col-start-2" : "col-start-1"
+                        }`}
+                    >
+                        <span
+                            class="icono icono-marron w-[52px] h-[52px]"
+                            style={`--ic: url('/iconos/${momento.icono}')`}
+                            aria-hidden="true"
+                        />
+                        <h3 class="font-callingstone text-marron text-[1rem] tracking-[0.06em] leading-[1.25] mt-2">
+                            {momento.nombre.map((linea) => (
+                                <span class="block">{linea}</span>
+                            ))}
+                        </h3>
+                        <p class="font-balham text-marron text-[0.68rem] tracking-wide mt-1">
+                            {momento.hora}
+                        </p>
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        gsap.utils.toArray<HTMLElement>(".momento").forEach((momento, i) => {
+            gsap.from(momento, {
+                scrollTrigger: { trigger: momento, start: "top 92%" },
+                opacity: 0,
+                x: i % 2 === 0 ? 30 : -30,
+                duration: 0.8,
+                ease: "power2.out",
+            });
+        });
+    });
+</script>

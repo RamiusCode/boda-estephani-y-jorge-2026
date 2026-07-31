@@ -1,0 +1,47 @@
+---
+// src/pages/index.astro
+import Layout from "../layouts/Layout.astro";
+
+import Portada from "../components/Portada.astro";
+import NombresFlores from "../components/NombresFlores.astro";
+import Frase from "../components/Frase.astro";
+import Reproductor from "../components/Reproductor.astro";
+import Versiculo from "../components/Versiculo.astro";
+import NombresPadres from "../components/NombresPadres.astro";
+import Fecha from "../components/Fecha.astro";
+import Contador from "../components/Contador.astro";
+import Calendario from "../components/Calendario.astro";
+import CeremoniaCivil from "../components/CeremoniaCivil.astro";
+import Cronograma from "../components/Cronograma.astro";
+import CodigoVestimenta from "../components/CodigoVestimenta.astro";
+import Historia from "../components/Historia.astro";
+import Confirmar from "../components/Confirmar.astro";
+import Despedida from "../components/Despedida.astro";
+import BotonMusica from "../components/BotonMusica.astro";
+---
+
+<Layout title="Stephanie & Jorge | 29 de Agosto 2026">
+    <!-- PORTADA (cubre todo hasta que se toca el sobre) -->
+    <Portada />
+
+    <!-- CONTENIDO DE LA INVITACIÓN -->
+    <div id="contenido-principal">
+        <NombresFlores />
+        <Frase />
+        <Reproductor />
+        <Versiculo />
+        <NombresPadres />
+        <Fecha />
+        <Contador />
+        <Calendario />
+        <CeremoniaCivil />
+        <Cronograma />
+        <CodigoVestimenta />
+        <Historia />
+        <Confirmar />
+        <Despedida />
+    </div>
+
+    <!-- Control de música flotante -->
+    <BotonMusica />
+</Layout>

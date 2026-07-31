@@ -1,0 +1,558 @@
+---
+// Regalos.astro
+---
+
+<section class="relative w-full py-4 px-6 overflow-hidden">
+    <!-- Partículas flotantes de fondo -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        <div
+            class="particula-dorada"
+            style="left: 10%; top: 20%; animation-delay: 0s;"
+        >
+        </div>
+        <div
+            class="particula-dorada"
+            style="left: 85%; top: 30%; animation-delay: 1.5s;"
+        >
+        </div>
+        <div
+            class="particula-dorada"
+            style="left: 15%; top: 70%; animation-delay: 3s;"
+        >
+        </div>
+        <div
+            class="particula-dorada"
+            style="left: 90%; top: 65%; animation-delay: 2s;"
+        >
+        </div>
+    </div>
+
+    <div
+        class="max-w-sm lg:max-w-3xl mx-auto relative z-10"
+        id="contenedor-regalos"
+    >
+        <!-- MARCO PRINCIPAL CON EFECTO GLASSMORPHISM -->
+        <div
+            class="backdrop-blur-sm rounded-3xl border-2 border-[#0a285e]/25 p-6 shadow-sm relative overflow-hidden"
+        >
+            <!-- Brillo sutil animado en la esquina -->
+            <div
+                class="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-[#0a285e]/10 to-transparent rounded-full blur-3xl animate-pulse-slow"
+            >
+            </div>
+            <div
+                class="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-tr from-[#0a285e]/8 to-transparent rounded-full blur-3xl animate-pulse-slow"
+                style="animation-delay: 1s;"
+            >
+            </div>
+
+            <!-- SUGERENCIA DE REGALO -->
+            <div class="text-center mb-6 relative" id="tarjeta-regalo">
+                <!-- Icono regalo con animación -->
+                <div class="flex justify-center mb-4">
+                    <div class="w-12 h-12 relative gift-icon-container">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-br from-[#9C7A2E]/20 to-[#9C7A2E]/5 rounded-full blur-xl animate-pulse-slow"
+                        >
+                        </div>
+                        <img
+                            src="/iconos/lluvia-sobre.png"
+                            alt="Icono de Regalo"
+                            class="w-full h-full object-contain relative z-10 transform transition-transform duration-300 hover:scale-110 verde-filter"
+                        />
+                    </div>
+                </div>
+
+                <!-- Título SIN efecto brillante -->
+                <h3
+                    class="text-[#9C7A2E] tracking-[0.3em] uppercase text-lg md:text-2xl mb-4 relative inline-block"
+                >
+                    Lluvia de sobres
+                </h3>
+
+                <!-- Línea decorativa -->
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <div
+                        class="w-10 h-px bg-gradient-to-r from-transparent to-[#9C7A2E]/30"
+                    >
+                    </div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-[#9C7A2E]/40"></div>
+                    <div
+                        class="w-10 h-px bg-gradient-to-l from-transparent to-[#9C7A2E]/30"
+                    >
+                    </div>
+                </div>
+
+                <!-- Texto elegante -->
+                <!-- Texto elegante -->
+                <p
+                    class="font-charm text-[#0a285e] text-lg md:text-2xl lg:text-3xl leading-relaxed"
+                >
+                    El mejor regalo es compartir este día a nuestro lado. Si
+                    deseas dejarnos un detalle, habrá una lluvia de sobres
+                    esperando tus buenos deseos en la entrada
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOJAS Y FLORES CON MOVIMIENTO NATURAL -->
+
+    <!-- Hoja dorada izquierda -->
+    <img
+        src="/imagenes/hojadorada.png"
+        alt="hoja dorada"
+        class="absolute left-0 top-8 md:top-24 w-18 h-18 md:w-28 md:h-28 opacity-0 pointer-events-none z-10"
+        id="hoja-left"
+    />
+
+    <!-- Hoja dorada derecha -->
+    <img
+        src="/imagenes/hojadorada.png"
+        alt="hoja dorada"
+        class="absolute right-0 top-8 md:top-24 w-18 h-18 md:w-28 md:h-28 opacity-0 pointer-events-none z-10 scale-x-[-1]"
+        id="hoja-right"
+    />
+
+    <!-- Flor lateral izquierda -->
+    <img
+        src="/imagenes/florlateral.png"
+        alt="hojas"
+        class="absolute left-0 top-12 md:top-24 w-18 h-18 md:w-28 md:h-28 opacity-0 pointer-events-none z-[11]"
+        id="flor-left"
+    />
+
+    <!-- Flor lateral derecha -->
+    <img
+        src="/imagenes/florlateral.png"
+        alt="hojas"
+        class="absolute right-0 top-12 md:top-24 w-18 h-18 md:w-28 md:h-28 opacity-0 pointer-events-none z-[11] scale-x-[-1]"
+        id="flor-right"
+    />
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 🎨 ESTILOS PERSONALIZADOS                                   -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<style>
+    /* Partículas flotantes doradas */
+    .particula-dorada {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: radial-gradient(circle, #9c7a2e 0%, transparent 70%);
+        border-radius: 50%;
+        animation: flotar 6s ease-in-out infinite;
+        opacity: 0.4;
+    }
+
+    @keyframes flotar {
+        0%,
+        100% {
+            transform: translateY(0) translateX(0);
+            opacity: 0.2;
+        }
+        50% {
+            transform: translateY(-30px) translateX(15px);
+            opacity: 0.6;
+        }
+    }
+
+    /* Animación de pulso lento */
+    @keyframes pulse-slow {
+        0%,
+        100% {
+            opacity: 0.4;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.6;
+            transform: scale(1.05);
+        }
+    }
+
+    .animate-pulse-slow {
+        animation: pulse-slow 4s ease-in-out infinite;
+    }
+
+    /* Efecto de brillo en QR al hacer hover */
+    .qr-shine {
+        transition: transform 0.7s ease;
+    }
+
+    #tarjeta-qr:hover .qr-shine {
+        transform: translateX(200%);
+        opacity: 1;
+    }
+
+    /* Animación suave del icono de regalo */
+    .gift-icon-container:hover img {
+        animation: bounce-gentle 0.6s ease;
+    }
+
+    @keyframes bounce-gentle {
+        0%,
+        100% {
+            transform: translateY(0) scale(1);
+        }
+        50% {
+            transform: translateY(-8px) scale(1.05);
+        }
+    }
+
+    /* Filtro que convierte imágenes PNG negras al color #0a285e */
+    .verde-filter {
+        filter: brightness(0) saturate(100%) invert(56%) sepia(77%)
+            saturate(419%) hue-rotate(5deg) brightness(94%) contrast(92%);
+    }
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 🎬 ANIMACIONES CON GSAP - MOVIMIENTOS MÁS NOTORIOS         -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const initRegalos = () => {
+        console.log("🎁 Iniciando sección de regalos elegante...");
+
+        // ═══ ESTADO INICIAL ═══
+        gsap.set("#contenedor-regalos", {
+            opacity: 0,
+            y: 50,
+            scale: 0.95,
+        });
+
+        // Flores laterales - Estado inicial
+        gsap.set("#flor-left", {
+            opacity: 0,
+            x: -40,
+            rotation: -8,
+            scale: 0.9,
+        });
+
+        gsap.set("#flor-right", {
+            opacity: 0,
+            x: 40,
+            rotation: 8,
+            scaleX: -0.9,
+            scaleY: 0.9,
+        });
+
+        // Hojas doradas - Estado inicial
+        gsap.set("#hoja-left", {
+            opacity: 0,
+            scale: 0,
+            rotation: -6,
+            transformOrigin: "bottom center",
+        });
+
+        gsap.set("#hoja-right", {
+            opacity: 0,
+            scaleX: 0,
+            scaleY: 0,
+            rotation: 6,
+            transformOrigin: "bottom center",
+        });
+
+        gsap.set("#tarjeta-regalo", { opacity: 0, y: 20 });
+        gsap.set("#tarjeta-qr", { opacity: 0, y: 30, scale: 0.95 });
+        gsap.set("#texto-inferior", { opacity: 0, y: 20 });
+
+        // ═══ ANIMACIÓN PRINCIPAL ═══
+        ScrollTrigger.create({
+            trigger: "#contenedor-regalos",
+            start: "top 75%",
+            end: "top 20%",
+
+            onEnter: () => {
+                const tl = gsap.timeline();
+
+                // Card aparece
+                tl.to(
+                    "#contenedor-regalos",
+                    {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        duration: 1.6,
+                        ease: "power3.out",
+                    },
+                    0,
+                )
+
+                    // 🌸 FLORES LATERALES - Entrada suave
+                    .to(
+                        "#flor-left",
+                        {
+                            opacity: 0.75,
+                            x: 0,
+                            rotation: -3,
+                            scale: 1,
+                            duration: 2.8,
+                            ease: "sine.out",
+                        },
+                        0,
+                    )
+
+                    .to(
+                        "#flor-right",
+                        {
+                            opacity: 0.75,
+                            x: 0,
+                            rotation: 3,
+                            scaleX: -1,
+                            scaleY: 1,
+                            duration: 2.8,
+                            ease: "sine.out",
+                        },
+                        0.05,
+                    )
+
+                    // 🍃 HOJAS DORADAS - Crecimiento natural
+                    .to(
+                        "#hoja-left",
+                        {
+                            opacity: 0.7,
+                            scale: 0.9,
+                            rotation: -3,
+                            duration: 2.2,
+                            ease: "sine.out",
+                        },
+                        0.1,
+                    )
+
+                    .to(
+                        "#hoja-right",
+                        {
+                            opacity: 0.7,
+                            scaleX: -0.9,
+                            scaleY: 0.9,
+                            rotation: 3,
+                            duration: 2.2,
+                            ease: "sine.out",
+                        },
+                        0.15,
+                    )
+
+                    // Contenido del card
+                    .to(
+                        "#tarjeta-regalo",
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 1,
+                            ease: "power2.out",
+                        },
+                        0.8,
+                    )
+                    .to(
+                        "#tarjeta-qr",
+                        {
+                            opacity: 1,
+                            y: 0,
+                            scale: 1,
+                            duration: 1,
+                            ease: "back.out(1.4)",
+                        },
+                        1.1,
+                    )
+                    .to(
+                        "#texto-inferior",
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.8,
+                            ease: "power2.out",
+                        },
+                        1.4,
+                    );
+
+                // ═══════════════════════════════════════════════════
+                // 🍃 MOVIMIENTOS MÁS NOTORIOS Y NATURALES
+                // ═══════════════════════════════════════════════════
+
+                // Flor izquierda - Movimiento más amplio
+                gsap.to("#flor-left", {
+                    y: -15,
+                    x: -8,
+                    rotation: -12,
+                    duration: 3,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: 3,
+                });
+
+                // Flor derecha - Movimiento más amplio inverso
+                gsap.to("#flor-right", {
+                    y: -12,
+                    x: 8,
+                    rotation: 12,
+                    duration: 3.3,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: 3.2,
+                });
+
+                // Hoja izquierda - Balanceo más pronunciado
+                gsap.to("#hoja-left", {
+                    y: -18,
+                    rotation: -15,
+                    duration: 3.5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: 3.3,
+                });
+
+                // Hoja derecha - Balanceo más pronunciado
+                gsap.to("#hoja-right", {
+                    y: -16,
+                    rotation: 15,
+                    duration: 3.8,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: 3.5,
+                });
+
+                // ═══ RESPIRACIÓN MÁS VISIBLE ═══
+                gsap.to("#hoja-left", {
+                    scale: 0.8,
+                    duration: 4,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: 4,
+                });
+
+                gsap.to("#hoja-right", {
+                    scaleX: -0.8,
+                    scaleY: 0.8,
+                    duration: 4.5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: 4.3,
+                });
+
+                // ═══ MOVIMIENTO HORIZONTAL ADICIONAL (Efecto brisa) ═══
+                gsap.to("#flor-left", {
+                    x: -12,
+                    duration: 5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: 4.5,
+                });
+
+                gsap.to("#flor-right", {
+                    x: 12,
+                    duration: 5.5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: 4.8,
+                });
+            },
+
+            onLeaveBack: () => {
+                // Resetear todas las animaciones continuas
+                gsap.killTweensOf("#flor-left");
+                gsap.killTweensOf("#flor-right");
+                gsap.killTweensOf("#hoja-left");
+                gsap.killTweensOf("#hoja-right");
+
+                const tl = gsap.timeline();
+
+                tl.to("#texto-inferior, #tarjeta-qr, #tarjeta-regalo", {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.3,
+                    stagger: 0.05,
+                    ease: "power2.in",
+                })
+
+                    .to(
+                        "#contenedor-regalos",
+                        {
+                            opacity: 0,
+                            y: 50,
+                            scale: 0.95,
+                            duration: 0.5,
+                            ease: "power2.in",
+                        },
+                        "<",
+                    )
+
+                    .to(
+                        "#flor-left",
+                        {
+                            opacity: 0,
+                            x: -40,
+                            duration: 1,
+                            ease: "sine.in",
+                        },
+                        "<",
+                    )
+
+                    .to(
+                        "#flor-right",
+                        {
+                            opacity: 0,
+                            x: 40,
+                            duration: 1,
+                            ease: "sine.in",
+                        },
+                        "<",
+                    )
+
+                    .to(
+                        "#hoja-left, #hoja-right",
+                        {
+                            opacity: 0,
+                            scale: 0,
+                            duration: 0.8,
+                            ease: "sine.in",
+                        },
+                        "<",
+                    )
+
+                    .set("#flor-left", {
+                        rotation: -8,
+                        scale: 0.9,
+                        x: -40,
+                        y: 0,
+                    })
+                    .set("#flor-right", {
+                        rotation: 8,
+                        scaleX: -0.9,
+                        scaleY: 0.9,
+                        x: 40,
+                        y: 0,
+                    })
+                    .set("#hoja-left", {
+                        rotation: -6,
+                        scale: 0,
+                        y: 0,
+                    })
+                    .set("#hoja-right", {
+                        scaleX: 0,
+                        scaleY: 0,
+                        rotation: 6,
+                        y: 0,
+                    });
+            },
+        });
+
+        console.log("🎁✨ Sección de regalos con hojas vivas activada!");
+    };
+
+    document.addEventListener("DOMContentLoaded", initRegalos);
+    document.addEventListener("astro:page-load", initRegalos);
+</script>

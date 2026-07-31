@@ -1,0 +1,87 @@
+---
+// src/components/Confirmar.astro
+// Banda "Querida familia y amigos" + botón de confirmación por WhatsApp.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const titulo = "Querida Familia y Amigos";
+
+const parrafos = [
+    ["Nos llena de felicidad poder", "compartir con ustedes este momento tan especial."],
+    ["Con la esperanza de que hagamos de este día un recuerdo", "inolvidable."],
+    [
+        "Los esperamos con los corazones llenos de emoción, listos",
+        "para celebrar con amor y crear memorias que permanezcan",
+        "siempre en nuestros corazones.",
+    ],
+];
+
+const cierre = "Esperamos contar con tu presencia";
+const despedida = "Te esperamos";
+
+// ⚠️ CAMBIAR por el WhatsApp real de los novios (código de país + número, sin +)
+const whatsapp = "59100000000";
+const mensaje =
+    "Me complace confirmar mi asistencia a la boda de Stephanie y Jorge. Nos vemos el sábado 29 de agosto. ¡Estaré sin falta!";
+
+const enlace = `https://wa.me/${whatsapp}?text=${encodeURIComponent(mensaje)}`;
+// ──────────────────────────────────────────────────────────────
+---
+
+<section class="w-full bg-vino py-8 px-7">
+    <h2
+        class="font-callingstone text-crema text-center text-[1.35rem] tracking-[0.12em]"
+    >
+        {titulo}
+    </h2>
+</section>
+
+<section id="confirmar" class="w-full px-4 pt-12 pb-14 text-center">
+    <div class="space-y-6">
+        {
+            parrafos.map((parrafo) => (
+                <p class="font-balham text-marron text-[clamp(0.74rem,3.25vw,0.92rem)] leading-[1.9]">
+                    {parrafo.map((linea) => (
+                        <span class="block">{linea}</span>
+                    ))}
+                </p>
+            ))
+        }
+    </div>
+
+    <p class="font-balham text-marron text-[1rem] mt-10">{cierre}</p>
+
+    <a
+        href={enlace}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="block w-full mt-8 px-6 py-4 rounded-xl bg-marron text-crema font-callingstone text-[1.35rem] tracking-[0.12em] shadow-[0_8px_18px_rgba(0,0,0,0.18)] transition-transform hover:scale-[1.02]"
+    >
+        Confirmar Asistencia
+    </a>
+
+    <p
+        class="font-callingstone text-marron text-[1.3rem] tracking-[0.14em] mt-14"
+    >
+        {despedida}
+    </p>
+</section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const seccion = document.getElementById("confirmar");
+        if (!seccion) return;
+
+        gsap.from(seccion.children, {
+            scrollTrigger: { trigger: seccion, start: "top 85%" },
+            opacity: 0,
+            y: 24,
+            duration: 0.9,
+            stagger: 0.15,
+            ease: "power2.out",
+        });
+    });
+</script>

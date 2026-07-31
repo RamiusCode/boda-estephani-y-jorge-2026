@@ -1,0 +1,78 @@
+---
+// src/components/CeremoniaCivil.astro
+// Banda "Ceremonia civil" + invitación, dirección y botón de ubicación.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const titulo = "Ceremonia Civil";
+
+const parrafos = [
+    ["Nos complace invitarles a compartir la ceremonia", "civil donde uniremos nuestras vidas en matrimonio."],
+    [
+        "Al finalizar, celebraremos con una recepción",
+        "en el mismo lugar.",
+        "“Salón Solárium - Automóvil Club Boliviano “",
+        "Calle 12 de Calacoto, esquina Av. General Inofuentes",
+    ],
+];
+
+// ⚠️ Reemplazar por el enlace exacto de Google Maps del salón
+const mapa =
+    "https://www.google.com/maps/search/?api=1&query=Autom%C3%B3vil+Club+Boliviano+Calacoto+La+Paz";
+// ──────────────────────────────────────────────────────────────
+---
+
+<section class="w-full bg-vino py-8 px-7">
+    <h2
+        class="font-callingstone text-crema text-center text-[1.35rem] tracking-[0.12em]"
+    >
+        {titulo}
+    </h2>
+</section>
+
+<section id="ceremonia-civil" class="w-full px-4 pt-12 pb-14 text-center">
+    <span
+        class="icono icono-marron w-[72px] h-[72px] mx-auto"
+        style="--ic: url('/iconos/iglesia.png')"
+        aria-hidden="true"></span>
+
+    <div class="mt-8 space-y-6">
+        {
+            parrafos.map((parrafo) => (
+                <p class="font-balham text-marron text-[clamp(0.74rem,3.25vw,0.92rem)] leading-[1.9]">
+                    {parrafo.map((linea) => (
+                        <span class="block">{linea}</span>
+                    ))}
+                </p>
+            ))
+        }
+    </div>
+
+    <a
+        href={mapa}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block mt-10 px-11 py-3 rounded-xl bg-marron text-crema font-callingstone text-[1.15rem] tracking-[0.14em] shadow-[0_8px_18px_rgba(0,0,0,0.18)] transition-transform hover:scale-[1.04]"
+    >
+        Ubicación
+    </a>
+</section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const seccion = document.getElementById("ceremonia-civil");
+        if (!seccion) return;
+
+        gsap.from(seccion.children, {
+            scrollTrigger: { trigger: seccion, start: "top 85%" },
+            opacity: 0,
+            y: 24,
+            duration: 0.9,
+            stagger: 0.15,
+            ease: "power2.out",
+        });
+    });
+</script>

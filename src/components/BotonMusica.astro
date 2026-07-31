@@ -1,0 +1,76 @@
+---
+// src/components/BotonMusica.astro
+// Botón flotante abajo a la derecha para pausar / reanudar la melodía.
+// Controla el mismo audio que arranca la portada (window.audioGlobal).
+---
+
+<button
+    id="boton-musica"
+    type="button"
+    aria-label="Pausar o reanudar la música"
+    class="fixed bottom-5 right-5 z-[9000] w-12 h-12 rounded-full bg-marron text-crema shadow-[0_6px_16px_rgba(0,0,0,0.28)] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:scale-105 cursor-pointer"
+>
+    <!-- Nota musical girando mientras suena -->
+    <svg
+        id="musica-sonando"
+        class="w-[22px] h-[22px]"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+    >
+        <path
+            d="M9 18V6.5l10-2v11M9 18a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zm10-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"
+        ></path>
+    </svg>
+
+    <!-- Nota tachada cuando está en pausa -->
+    <svg
+        id="musica-pausada"
+        class="w-[22px] h-[22px] hidden"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+    >
+        <path d="M9 18V6.5l10-2v11"></path>
+        <circle cx="6.5" cy="18" r="2.5"></circle>
+        <circle cx="16.5" cy="15.5" r="2.5"></circle>
+        <path d="M3 3l18 18"></path>
+    </svg>
+</button>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const boton = document.getElementById("boton-musica");
+        const iconoSonando = document.getElementById("musica-sonando");
+        const iconoPausado = document.getElementById("musica-pausada");
+        if (!boton) return;
+
+        const pintarEstado = (sonando: boolean) => {
+            iconoSonando?.classList.toggle("hidden", !sonando);
+            iconoPausado?.classList.toggle("hidden", sonando);
+        };
+
+        // Aparece recién cuando la portada arranca la melodía
+        const esperar = setInterval(() => {
+            const audio = (window as any).audioGlobal as
+                | HTMLAudioElement
+                | undefined;
+            if (!audio) return;
+            clearInterval(esperar);
+
+            boton.classList.remove("opacity-0", "pointer-events-none");
+            boton.classList.add("opacity-100");
+
+            pintarEstado(!audio.paused);
+            audio.addEventListener("play", () => pintarEstado(true));
+            audio.addEventListener("pause", () => pintarEstado(false));
+
+            boton.addEventListener("click", () => {
+                if (audio.paused) audio.play();
+                else audio.pause();
+                (window as any).estaReproduciendoGlobal = !audio.paused;
+            });
+        }, 200);
+    });
+</script>

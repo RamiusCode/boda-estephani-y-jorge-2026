@@ -1,0 +1,76 @@
+---
+// src/components/NombresPadres.astro
+// Arco vino con la bendición y los nombres de los padres.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const bendicion = ["Con la bendición de Dios", "y de nuestros padres :"];
+
+const padres = [
+    {
+        titulo: "Padres del Novio",
+        nombres: ["Jorge A. Aranibar Dupleich", "Mónica B. Rodrigo Severich"],
+    },
+    {
+        titulo: "Padres de la Novia",
+        nombres: ["Javier J. Loayza Antelo (+)", "Yovanka Oliden de Loayza"],
+    },
+];
+// ──────────────────────────────────────────────────────────────
+---
+
+<section class="w-full flex justify-center pt-14 pb-12 px-6">
+    <div
+        id="arco-padres"
+        class="w-full max-w-[340px] bg-vino rounded-t-full shadow-[0_14px_30px_rgba(0,0,0,0.18)] flex flex-col items-center text-center px-7 pt-32 pb-12"
+    >
+        <p class="font-adelia text-crema text-[1.6rem] leading-[1.75]">
+            {bendicion.map((linea) => <span class="block">{linea}</span>)}
+        </p>
+
+        {
+            padres.map((grupo, i) => (
+                <div class={i === 0 ? "mt-9" : "mt-8"}>
+                    <h3 class="font-callingstone text-crema text-[1.15rem] tracking-[0.14em]">
+                        {grupo.titulo}
+                    </h3>
+                    <div class="mt-3 space-y-1.5">
+                        {grupo.nombres.map((nombre) => (
+                            <p class="font-balham text-crema text-[1rem] tracking-wide">
+                                {nombre}
+                            </p>
+                        ))}
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const arco = document.getElementById("arco-padres");
+        if (!arco) return;
+
+        gsap.from(arco, {
+            scrollTrigger: { trigger: arco, start: "top 88%" },
+            opacity: 0,
+            y: 30,
+            duration: 1,
+            ease: "power2.out",
+        });
+
+        gsap.from(arco.children, {
+            scrollTrigger: { trigger: arco, start: "top 85%" },
+            opacity: 0,
+            y: 20,
+            duration: 0.8,
+            stagger: 0.16,
+            delay: 0.2,
+            ease: "power2.out",
+        });
+    });
+</script>
