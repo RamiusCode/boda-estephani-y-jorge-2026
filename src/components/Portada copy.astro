@@ -19,23 +19,30 @@
 <section
     class="fixed inset-0 w-full h-screen flex justify-center z-[10000]"
     id="portada-section"
-    style="background-color: #f7f5f2; background-image: url('/imagenes/fondoprincipal.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"
+    style="background-color: #e9e4dd;"
 >
+    <!-- Columna móvil: el diseño nunca se estira en tablet / PC -->
     <div
-        class="relative w-full max-w-[480px] h-full flex flex-col items-center justify-center px-6"
+        class="relative w-full max-w-[430px] h-full flex flex-col items-center justify-center px-6"
+        style="background-color: #f7f5f2; background-image: url('/imagenes/fondoprincipal.png'); background-size: cover; background-position: center; background-repeat: no-repeat; box-shadow: 0 0 40px rgba(0,0,0,0.08);"
     >
-        <!-- BLOQUE ARCO + SOBRE -->
-        <div id="sobre-container" class="relative cursor-pointer select-none">
-            <!-- Arco guindo (detrás) -->
-            <div id="arco" class="arco-guindo"></div>
+        <!-- BLOQUE ARCO + SOBRE (compensa el arco que sobresale a la izquierda) -->
+        <div class="bloque-sobre">
+            <div
+                id="sobre-container"
+                class="relative w-full cursor-pointer select-none"
+            >
+                <!-- Arco guindo (detrás) -->
+                <div id="arco" class="arco-guindo"></div>
 
-            <!-- Sobre -->
-            <img
-                id="sobre-img"
-                src="/imagenes/sobre.png"
-                alt="Sobre de invitación"
-                class="relative block w-[clamp(200px,58vw,260px)] h-auto z-[2]"
-            />
+                <!-- Sobre -->
+                <img
+                    id="sobre-img"
+                    src="/imagenes/sobre.png"
+                    alt="Sobre de invitación"
+                    class="relative block w-full h-auto z-[2]"
+                />
+            </div>
         </div>
 
         <!-- Instrucción -->
@@ -46,6 +53,17 @@
 </section>
 
 <style>
+    /*
+       El arco sobresale 14% hacia la izquierda del sobre, así que el bloque
+       se desplaza la mitad de ese excedente (7%) para que el conjunto
+       arco + sobre quede ópticamente centrado en la columna.
+    */
+    .bloque-sobre {
+        width: 100%;
+        max-width: 250px;
+        transform: translateX(7%);
+    }
+
     /* Arco guindo: rectángulo con la parte superior semicircular */
     .arco-guindo {
         position: absolute;
@@ -53,7 +71,7 @@
         bottom: 15%;
         left: -14%;
         width: 106%;
-        background-color: #a4142b;
+        background-color: var(--color-vino);
         border-radius: 9999px 9999px 0 0;
         z-index: 1;
     }
@@ -64,11 +82,12 @@
     }
 
     .instruccion {
-        margin-top: 3.2rem;
+        margin-top: 3rem;
         text-align: center;
         color: #4f4a47;
-        font-size: clamp(0.68rem, 2.6vw, 0.82rem);
-        letter-spacing: 0.22em;
+        font-size: clamp(0.78rem, 3.2vw, 0.95rem);
+        letter-spacing: 0.2em;
+        line-height: 1.9;
         text-transform: uppercase;
     }
 

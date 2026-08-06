@@ -1,0 +1,68 @@
+---
+// src/components/Fecha.astro
+// Banda "Acompáñanos este día" + los tres datos: día, lugar y hora.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const titulo = ["ACOMPÁÑANOS ESTE DÍA", "TAN ESPECIAL"];
+
+const datos = [
+    { rotulo: "DIA", valor: ["29", "Agosto"] },
+    { rotulo: "LUGAR", valor: ["Automovil Club"] },
+    { rotulo: "HORA", valor: ["12:00", "p . m ."] },
+];
+// ──────────────────────────────────────────────────────────────
+---
+
+<section id="franja-fecha" class="franja relative w-full py-8 px-7 overflow-hidden">
+    <div class="franja-fondo absolute inset-0 bg-vino"></div>
+
+    <h2
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.75rem,3.8vw,1.02rem)] tracking-[0.1em] leading-[2.2]"
+    >
+        {titulo.map((linea) => (
+            <span class="block whitespace-nowrap">{linea}</span>
+        ))}
+    </h2>
+</section>
+
+<section id="datos-boda" class="w-full px-6 pt-14 pb-24">
+    <div class="flex items-stretch justify-center gap-0">
+        {
+            datos.map((dato, i) => (
+                <>
+                    {i > 0 && <div class="w-px bg-marron/70 my-1" />}
+                    <div class="flex-1 px-2 text-center">
+                        <h3 class="font-callingstone text-marron text-[clamp(0.95rem,4.6vw,1.25rem)] tracking-[0.05em] whitespace-nowrap">
+                            {dato.rotulo}
+                        </h3>
+                        <div class="mt-2">
+                            {dato.valor.map((linea) => (
+                                <p class="font-callingstone text-marron text-[clamp(0.8rem,3.6vw,1rem)] tracking-[0.08em] leading-[1.55]">
+                                    {linea}
+                                </p>
+                            ))}
+                        </div>
+                    </div>
+                </>
+            ))
+        }
+    </div>
+</section>
+
+<script>
+    import { animarEntrada, animarFranja } from "../scripts/animaciones";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const franja = document.getElementById("franja-fecha");
+        if (franja) animarFranja(franja, { estilo: "cinta" });
+
+        const bloque = document.getElementById("datos-boda");
+        if (!bloque) return;
+
+        // Las tres columnas (día, lugar y hora) entran una detrás de otra.
+        animarEntrada(
+            bloque.querySelectorAll<HTMLElement>(":scope > div > *"),
+            bloque,
+            { start: "top 88%", stagger: 0.2 },
+        );
+    });
+</script>

@@ -1,0 +1,57 @@
+---
+// src/components/Despedida.astro
+// Arco final a todo el ancho con el monograma, los nombres y el lugar.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const monograma = "SJ";
+const novios = "Stephanie & Jorge";
+const lugar = "La Paz - Bolivia";
+// ──────────────────────────────────────────────────────────────
+---
+
+<section class="w-full pt-2">
+    <div
+        id="arco-final"
+        class="w-full bg-vino rounded-t-full px-6 pt-[22%] pb-20 text-center"
+    >
+        <img
+            src="/imagenes/sj.png"
+            alt={monograma}
+            width="908"
+            height="702"
+            class="w-[82px] h-auto mx-auto"
+        />
+
+        <h2
+            class="font-adelia text-crema text-[clamp(1.5rem,7vw,1.9rem)] leading-[1.4] mt-10 whitespace-nowrap"
+        >
+            {novios}
+        </h2>
+
+        <p
+            class="font-callingstone text-crema text-[1.2rem] tracking-[0.14em] mt-14"
+        >
+            {lugar}
+        </p>
+    </div>
+</section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const arco = document.getElementById("arco-final");
+        if (!arco) return;
+
+        gsap.from(arco.children, {
+            scrollTrigger: { trigger: arco, start: "top 80%" },
+            opacity: 0,
+            y: 26,
+            duration: 0.9,
+            stagger: 0.16,
+            ease: "power2.out",
+        });
+    });
+</script>

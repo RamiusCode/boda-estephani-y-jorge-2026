@@ -1,8 +1,8 @@
----
+﻿---
 // src/components/Contador.astro
 // Banda "Falta para nuestra boda" + cuenta regresiva en arcos marrones.
 // ── DATOS EDITABLES ───────────────────────────────────────────
-const titulo = "Falta para nuestra boda";
+const titulo = "FALTA PARA NUESTRA BODA";
 // Fecha y hora de la boda (año, mes-1, día, hora, minuto)
 const fechaBoda = "2026-08-29T12:00:00";
 // ──────────────────────────────────────────────────────────────
@@ -15,9 +15,14 @@ const casillas = [
 ];
 ---
 
-<section class="w-full bg-vino py-9 px-7">
+<section
+    id="franja-contador"
+    class="franja relative w-full py-9 px-7 overflow-hidden"
+>
+    <div class="franja-fondo absolute inset-0 bg-vino"></div>
+
     <h2
-        class="font-callingstone text-crema text-center text-[1.35rem] tracking-[0.1em]"
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.75rem,3.8vw,1.02rem)] tracking-[0.1em] whitespace-nowrap"
     >
         {titulo}
     </h2>
@@ -25,22 +30,24 @@ const casillas = [
 
 <section
     id="contador"
-    class="w-full px-6 py-14 flex justify-center"
+    class="w-full px-6 pt-14 pb-24 flex justify-center"
     data-fecha={fechaBoda}
 >
-    <div class="flex justify-center gap-2.5 w-full max-w-[330px]">
+    <div class="flex justify-center gap-2.5 w-full max-w-[360px]">
         {
             casillas.map((casilla) => (
-                <div class="flex-1 flex flex-col items-center">
+                // min-w-0: sin esto el rótulo más largo ("Segundos") ensancha
+                // su columna y los cuatro arcos dejan de medir igual.
+                <div class="flex-1 min-w-0 flex flex-col items-center">
                     <div class="w-full aspect-[3/4] bg-marron rounded-t-full flex items-center justify-center">
                         <span
                             id={casilla.id}
-                            class="font-tangerine text-crema text-[2.9rem] leading-none pt-3"
+                            class="font-adelia text-crema text-[clamp(1.2rem,6.96vw,1.9rem)] leading-none pt-3"
                         >
                             00
                         </span>
                     </div>
-                    <p class="font-balham text-marron text-[0.9rem] mt-2.5">
+                    <p class="font-callingstone text-marron text-[clamp(0.72rem,3.6vw,1rem)] mt-2.5 whitespace-nowrap">
                         {casilla.rotulo}
                     </p>
                 </div>
@@ -50,9 +57,17 @@ const casillas = [
 </section>
 
 <script>
+    import { animarEntrada, animarFranja } from "../scripts/animaciones";
+
     document.addEventListener("DOMContentLoaded", () => {
+        const franja = document.getElementById("franja-contador");
+        if (franja) animarFranja(franja);
+
         const seccion = document.getElementById("contador");
         if (!seccion) return;
+
+        // Los cuatro arcos de la cuenta regresiva.
+        animarEntrada(seccion.querySelectorAll<HTMLElement>(":scope > div > div"), seccion);
 
         const objetivo = new Date(seccion.dataset.fecha as string).getTime();
         const el = (id: string) => document.getElementById(id);

@@ -1,5 +1,39 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════
+   PALETA DE LA INVITACIÓN  (usar como bg-vino, text-marron...)
+   ═══════════════════════════════════════════════════════════ */
+@theme {
+  --color-vino: #8e2325;
+  --color-marron: #6a4925;
+  --color-crema: #f7f5f6;
+  --color-papel: #f5f3f2;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ICONOS PNG COLOREADOS (se pintan con máscara, no con filtros)
+   Uso: <span class="icono icono-marron" style="--ic:url('/iconos/cena.png')"></span>
+   ═══════════════════════════════════════════════════════════ */
+.icono {
+  display: inline-block;
+  -webkit-mask-image: var(--ic);
+  mask-image: var(--ic);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.icono-marron {
+  background-color: #6a4925;
+}
+
+.icono-crema {
+  background-color: #f7f5f6;
+}
+
 
 /* Fuente personalizada Tangerine */
 @font-face {

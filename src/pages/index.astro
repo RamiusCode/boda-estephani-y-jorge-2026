@@ -3,7 +3,6 @@
 import Layout from "../layouts/Layout.astro";
 
 import Portada from "../components/Portada.astro";
-import NombresFlores from "../components/NombresFlores.astro";
 import Frase from "../components/Frase.astro";
 import Reproductor from "../components/Reproductor.astro";
 import Versiculo from "../components/Versiculo.astro";
@@ -26,9 +25,8 @@ import BotonMusica from "../components/BotonMusica.astro";
 
     <!-- CONTENIDO DE LA INVITACIÓN -->
     <div id="contenido-principal">
-        <NombresFlores />
         <Frase />
-        <Reproductor />
+        <!-- <Reproductor /> -->
         <Versiculo />
         <NombresPadres />
         <Fecha />
@@ -38,7 +36,8 @@ import BotonMusica from "../components/BotonMusica.astro";
         <Cronograma />
         <CodigoVestimenta />
         <Historia />
-        <Confirmar />
+        {/* Pases de este invitado: cambiar el número por invitación */}
+        <Confirmar pases={2} />
         <Despedida />
     </div>
 

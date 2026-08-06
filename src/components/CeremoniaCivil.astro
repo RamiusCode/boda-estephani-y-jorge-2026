@@ -1,18 +1,27 @@
----
+﻿---
 // src/components/CeremoniaCivil.astro
 // Banda "Ceremonia civil" + invitación, dirección y botón de ubicación.
 // ── DATOS EDITABLES ───────────────────────────────────────────
-const titulo = "Ceremonia Civil";
+const titulo = "CEREMONIA CIVIL";
 
+// Renglones cortos a propósito: con líneas de ~50 caracteres el texto no
+// podía pasar de 17px sin desbordar. Partidas así, entran mucho más grandes.
 const parrafos = [
-    ["Nos complace invitarles a compartir la ceremonia", "civil donde uniremos nuestras vidas en matrimonio."],
     [
-        "Al finalizar, celebraremos con una recepción",
-        "en el mismo lugar.",
-        "“Salón Solárium - Automóvil Club Boliviano “",
-        "Calle 12 de Calacoto, esquina Av. General Inofuentes",
+        "Nos complace invitarles a compartir",
+        "la ceremonia civil donde uniremos",
+        "nuestras vidas en matrimonio.",
+    ],
+    [
+        "Al finalizar, celebraremos con una",
+        "recepción en el mismo lugar.",
     ],
 ];
+
+// El salón va resaltado y la dirección más chica: es la línea más larga
+// de la sección y es la que marca el techo del tamaño de todo el bloque.
+const salon = ["Salón Solárium", "Automóvil Club Boliviano"];
+const direccion = ["Calle 12 de Calacoto,", "esquina Av. General Inofuentes"];
 
 // ⚠️ Reemplazar por el enlace exacto de Google Maps del salón
 const mapa =
@@ -20,59 +29,72 @@ const mapa =
 // ──────────────────────────────────────────────────────────────
 ---
 
-<section class="w-full bg-vino py-8 px-7">
+<section
+    id="franja-ceremonia"
+    class="franja relative w-full py-8 px-7 overflow-hidden"
+>
+    <div class="franja-fondo absolute inset-0 bg-vino"></div>
+
     <h2
-        class="font-callingstone text-crema text-center text-[1.35rem] tracking-[0.12em]"
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.75rem,3.8vw,1.02rem)] tracking-[0.12em]"
     >
         {titulo}
     </h2>
 </section>
 
-<section id="ceremonia-civil" class="w-full px-4 pt-12 pb-14 text-center">
+<section id="ceremonia-civil" class="w-full px-4 pt-14 pb-24 text-center">
     <span
-        class="icono icono-marron w-[72px] h-[72px] mx-auto"
-        style="--ic: url('/iconos/iglesia.png')"
+        class="icono icono-marron w-[88px] h-[88px] mx-auto"
+        style="--ic: url('/imagenes/ceremoniacivil.png')"
         aria-hidden="true"></span>
 
-    <div class="mt-8 space-y-6">
+    <div class="mt-4 space-y-3">
         {
             parrafos.map((parrafo) => (
-                <p class="font-balham text-marron text-[clamp(0.74rem,3.25vw,0.92rem)] leading-[1.9]">
+                <p class="font-balham text-marron text-[clamp(0.9rem,4.8vw,1.3rem)] leading-[1.45]">
                     {parrafo.map((linea) => (
-                        <span class="block">{linea}</span>
+                        <span class="block whitespace-nowrap">{linea}</span>
                     ))}
                 </p>
             ))
         }
+
+        <div class="pt-1">
+            <p
+                class="font-callingstone text-vino text-[clamp(0.78rem,3.95vw,1.06rem)] tracking-[0.06em] leading-[2.1]"
+            >
+                {salon.map((linea) => (
+                    <span class="block whitespace-nowrap">{linea}</span>
+                ))}
+            </p>
+            <p
+                class="font-balham text-marron text-[clamp(0.9rem,4.8vw,1.3rem)] leading-[1.45] mt-2"
+            >
+                {direccion.map((linea) => (
+                    <span class="block whitespace-nowrap">{linea}</span>
+                ))}
+            </p>
+        </div>
     </div>
 
     <a
         href={mapa}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-block mt-10 px-11 py-3 rounded-xl bg-marron text-crema font-callingstone text-[1.15rem] tracking-[0.14em] shadow-[0_8px_18px_rgba(0,0,0,0.18)] transition-transform hover:scale-[1.04]"
+        class="inline-block mt-4 px-8 py-2 rounded-full bg-marron text-crema font-callingstone text-[0.76rem] tracking-[0.22em] shadow-[0_4px_12px_rgba(0,0,0,0.14)] transition-transform hover:scale-[1.04]"
     >
-        Ubicación
+        UBICACIÓN
     </a>
 </section>
 
 <script>
-    import { gsap } from "gsap";
-    import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-    gsap.registerPlugin(ScrollTrigger);
+    import { animarEntrada, animarFranja } from "../scripts/animaciones";
 
     document.addEventListener("DOMContentLoaded", () => {
-        const seccion = document.getElementById("ceremonia-civil");
-        if (!seccion) return;
+        const franja = document.getElementById("franja-ceremonia");
+        if (franja) animarFranja(franja);
 
-        gsap.from(seccion.children, {
-            scrollTrigger: { trigger: seccion, start: "top 85%" },
-            opacity: 0,
-            y: 24,
-            duration: 0.9,
-            stagger: 0.15,
-            ease: "power2.out",
-        });
+        const seccion = document.getElementById("ceremonia-civil");
+        if (seccion) animarEntrada(seccion.children, seccion);
     });
 </script>

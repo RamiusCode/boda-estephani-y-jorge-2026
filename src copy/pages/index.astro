@@ -1,58 +1,46 @@
 ---
 // src/pages/index.astro
 import Layout from "../layouts/Layout.astro";
+
 import Portada from "../components/Portada.astro";
-import NombresFlores from "../components/NombresFlores.astro";
-import Dedicatoria from "../components/Dedicatoria.astro";
+import Frase from "../components/Frase.astro";
 import Reproductor from "../components/Reproductor.astro";
-import Bendicion from "../components/Bendicion.astro";
-import NombrePadres from "../components/NombresPadres.astro";
+import Versiculo from "../components/Versiculo.astro";
+import NombresPadres from "../components/NombresPadres.astro";
 import Fecha from "../components/Fecha.astro";
 import Contador from "../components/Contador.astro";
-import Foto2 from "../components/Foto2.astro";
-import DireccionCeremonia from "../components/DireccionCeremonia.astro";
-import DireccionRecepcion from "../components/DireccionRecepcion.astro";
-import Itinerario from "../components/Itinerario.astro";
-import Reservas from "../components/Reservas.astro";
-import SugerenciaRegalo from "../components/SugerenciaRegalo.astro";
+import Calendario from "../components/Calendario.astro";
+import CeremoniaCivil from "../components/CeremoniaCivil.astro";
+import Cronograma from "../components/Cronograma.astro";
 import CodigoVestimenta from "../components/CodigoVestimenta.astro";
-import Restriccion from "../components/Restriccion.astro";
+import Historia from "../components/Historia.astro";
 import Confirmar from "../components/Confirmar.astro";
-import DespedidaDedicatoria from "../components/DespedidaDedicatoria.astro";
-import Foto3 from "../components/foto3.astro";
-import Des from "../components/Des.astro";
-import GaleriaFotos from "../components/GaleriaFotos.astro";
-import Galeria from "../components/Galeria.astro";
+import Despedida from "../components/Despedida.astro";
+import BotonMusica from "../components/BotonMusica.astro";
 ---
 
-<Layout title="Boda">
-    <!-- PORTADA (se muestra primero, bloquea scroll) -->
-    <Portada />
+<Layout title="Stephanie & Jorge | 29 de Agosto 2026">
+    <!-- PORTADA (cubre todo hasta que se toca el sobre) -->
+    <!-- <Portada /> -->
 
-    <!-- CONTENIDO PRINCIPAL (oculto hasta que se presione el sobre) -->
+    <!-- CONTENIDO DE LA INVITACIÓN -->
     <div id="contenido-principal">
-        <NombresFlores />
-        <Dedicatoria />
+        <Frase />
         <!-- <Reproductor /> -->
-        <Bendicion />
-        <NombrePadres />
+        <Versiculo />
+        <NombresPadres />
         <Fecha />
         <Contador />
-        <Foto2 />
-        <DireccionCeremonia />
-        <DireccionRecepcion />
-        <!-- <Itinerario /> -->
-        <!-- <Reservas numeroPases={2} /> -->
-        <!-- <SugerenciaRegalo /> -->
-        <!-- <GaleriaFotos /> -->
-        <!-- <CodigoVestimenta /> -->
-        <!-- <Restriccion /> -->
-        <!-- <Galeria /> -->
-        <Confirmar />
-
-        <DespedidaDedicatoria />
-        <Foto3 />
-
-        <Des />
+        <Calendario />
+        <CeremoniaCivil />
+        <Cronograma />
+        <CodigoVestimenta />
+        <Historia />
+        {/* Pases de este invitado: cambiar el número por invitación */}
+        <Confirmar pases={2} />
+        <Despedida />
     </div>
+
+    <!-- Control de música flotante -->
+    <BotonMusica />
 </Layout>

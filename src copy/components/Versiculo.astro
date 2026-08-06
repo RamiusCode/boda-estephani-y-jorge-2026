@@ -1,0 +1,47 @@
+---
+// src/components/Versiculo.astro
+// Banda vino con el versículo bíblico.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const versiculo = [
+    "ASÍ QUE NO SON YA MÁS DOS, SINO UNA SOLA",
+    "CARNE; POR TANTO, LO QUE DIOS HA UNIDO,",
+    "NO LO SEPARE EL HOMBRE.",
+];
+const cita = "Mateo 19:6";
+// ──────────────────────────────────────────────────────────────
+---
+
+<section class="w-full bg-vino py-10 px-4 mt-8" id="versiculo">
+    <p
+        class="font-callingstone text-crema text-center text-[clamp(0.6rem,3.05vw,0.83rem)] tracking-[0.05em] leading-[1.95]"
+    >
+        {versiculo.map((linea) => <span class="block whitespace-nowrap">{linea}</span>)}
+    </p>
+
+    <p
+        class="font-callingstone text-crema text-center text-[clamp(0.8rem,3.6vw,1rem)] tracking-[0.08em] mt-6"
+    >
+        {cita}
+    </p>
+</section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const seccion = document.getElementById("versiculo");
+        if (!seccion) return;
+
+        gsap.from(seccion.children, {
+            scrollTrigger: { trigger: seccion, start: "top 88%" },
+            opacity: 0,
+            y: 18,
+            duration: 0.9,
+            stagger: 0.18,
+            ease: "power2.out",
+        });
+    });
+</script>

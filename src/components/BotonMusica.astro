@@ -10,22 +10,28 @@
     aria-label="Pausar o reanudar la música"
     class="fixed bottom-5 right-5 z-[9000] w-12 h-12 rounded-full bg-marron text-crema shadow-[0_6px_16px_rgba(0,0,0,0.28)] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:scale-105 cursor-pointer"
 >
-    <!-- Nota musical girando mientras suena -->
+    <!--
+       El icono anuncia lo que pasa al tocarlo, no el estado actual:
+       nota limpia = está en pausa, tocá para reanudar.
+    -->
     <svg
-        id="musica-sonando"
-        class="w-[22px] h-[22px]"
+        id="icono-nota"
+        class="w-[22px] h-[22px] hidden"
         viewBox="0 0 24 24"
-        fill="currentColor"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
     >
-        <path
-            d="M9 18V6.5l10-2v11M9 18a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zm10-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"
-        ></path>
+        <path d="M9 18V6.5l10-2v11"></path>
+        <circle cx="6.5" cy="18" r="2.5"></circle>
+        <circle cx="16.5" cy="15.5" r="2.5"></circle>
     </svg>
 
-    <!-- Nota tachada cuando está en pausa -->
+    <!-- Nota tachada = está sonando, tocá para silenciar. -->
     <svg
-        id="musica-pausada"
-        class="w-[22px] h-[22px] hidden"
+        id="icono-nota-tachada"
+        class="w-[22px] h-[22px]"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -42,13 +48,15 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const boton = document.getElementById("boton-musica");
-        const iconoSonando = document.getElementById("musica-sonando");
-        const iconoPausado = document.getElementById("musica-pausada");
+        const iconoNota = document.getElementById("icono-nota");
+        const iconoTachado = document.getElementById("icono-nota-tachada");
         if (!boton) return;
 
+        // Mientras suena se muestra la nota tachada (tocá para silenciar) y
+        // en pausa la nota limpia (tocá para reanudar).
         const pintarEstado = (sonando: boolean) => {
-            iconoSonando?.classList.toggle("hidden", !sonando);
-            iconoPausado?.classList.toggle("hidden", sonando);
+            iconoTachado?.classList.toggle("hidden", !sonando);
+            iconoNota?.classList.toggle("hidden", sonando);
         };
 
         // Aparece recién cuando la portada arranca la melodía

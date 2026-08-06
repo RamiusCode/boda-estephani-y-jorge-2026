@@ -1,0 +1,58 @@
+---
+// src/components/Historia.astro
+// Arco vino con la historia de los novios.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const titulo = "Historia";
+
+const parrafos = [
+    "Hay historias que comienzan en el momento menos esperado… y otras que, sin saberlo, empiezan mucho antes.",
+    "La nuestra comenzó hace tiempo, cuando el destino cruzó nuestros caminos por primera vez. Sin embargo, fue hace un año cuando decidimos mirarnos de nuevo, abrir el corazón y darnos una verdadera oportunidad.",
+    "Desde entonces, descubrimos que el amor también se construye con paciencia, complicidad, respeto y la decisión de caminar de la mano, incluso en los días más inciertos. Cada paso nos confirmó que aquella oportunidad era, en realidad, el inicio de la historia que siempre estuvo destinada para nosotros.",
+    "Hoy, nuestro camino está lleno de ilusión, sueños compartidos y una hermosa claridad que ilumina cada uno de nuestros días y nos recuerda que las mejores decisiones nacen del amor.",
+    "Con inmensa felicidad, queremos invitarlos a ser testigos del momento en que uniremos nuestras vidas para siempre, celebrando junto a quienes más queremos el comienzo de este nuevo capítulo.",
+];
+// ──────────────────────────────────────────────────────────────
+---
+
+<section class="w-full flex justify-center pt-10 pb-12 px-6">
+    <div
+        id="arco-historia"
+        class="w-full max-w-[350px] bg-vino rounded-t-full shadow-[0_14px_30px_rgba(0,0,0,0.18)] px-8 pt-20 pb-12"
+    >
+        <h2
+            class="font-callingstone text-crema text-center text-[1.55rem] tracking-[0.12em]"
+        >
+            {titulo}
+        </h2>
+
+        <div class="mt-8 space-y-5">
+            {
+                parrafos.map((parrafo) => (
+                    <p class="font-balham text-crema text-[0.92rem] leading-[1.75] text-center">
+                        {parrafo}
+                    </p>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const arco = document.getElementById("arco-historia");
+        if (!arco) return;
+
+        gsap.from(arco, {
+            scrollTrigger: { trigger: arco, start: "top 90%" },
+            opacity: 0,
+            y: 32,
+            duration: 1,
+            ease: "power2.out",
+        });
+    });
+</script>
