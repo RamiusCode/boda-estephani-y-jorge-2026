@@ -1,0 +1,61 @@
+---
+// src/components/NombresPadres.astro
+// Arco vino con la bendición y los nombres de los padres.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const bendicion = ["Con la bendición de Dios", "y de nuestros padres :"];
+
+const padres = [
+    {
+        titulo: "PADRES DE LA NOVIA",
+        nombres: ["Jorge A. Aranibar Dupleich", "Mónica B. Rodrigo Severich"],
+    },
+    {
+        titulo: "PADRES DEL NOVIO",
+        nombres: ["Javier J. Loayza Antelo (+)", "Yovanka B. Oliden de Loayza"],
+    },
+];
+// ──────────────────────────────────────────────────────────────
+---
+
+<section class="w-full flex justify-center pt-20 pb-24 px-6">
+    <div
+        id="arco-padres"
+        class="w-full max-w-[340px] bg-vino rounded-t-full shadow-[0_14px_30px_rgba(0,0,0,0.18)] flex flex-col items-center text-center px-7 pt-24 pb-12"
+    >
+        <p class="font-adelia text-crema text-[clamp(0.87rem,4.4vw,1.18rem)] leading-[2.4]">
+            {bendicion.map((linea) => (
+                <span class="block whitespace-nowrap">{linea}</span>
+            ))}
+        </p>
+
+        {
+            padres.map((grupo, i) => (
+                <div class={i === 0 ? "mt-9" : "mt-8"}>
+                    <h3 class="font-callingstone text-crema text-[clamp(0.6rem,3.05vw,0.83rem)] tracking-[0.14em] whitespace-nowrap">
+                        {grupo.titulo}
+                    </h3>
+                    <div class="mt-3 space-y-1.5">
+                        {grupo.nombres.map((nombre) => (
+                            <p class="font-balham text-crema text-[clamp(0.85rem,4.4vw,1.15rem)] tracking-wide whitespace-nowrap">
+                                {nombre}
+                            </p>
+                        ))}
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</section>
+
+<script>
+    import { animarEntrada } from "../scripts/animaciones";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const arco = document.getElementById("arco-padres");
+        if (!arco) return;
+
+        // El arco entra como una sola pieza: encadenar arco y contenido hacía
+        // esperar de más para algo que se lee de un vistazo.
+        animarEntrada(arco, arco, { y: 22 });
+    });
+</script>

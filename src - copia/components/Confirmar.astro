@@ -1,0 +1,154 @@
+﻿---
+// src/components/Confirmar.astro
+// Banda "Querida familia y amigos" + pases reservados + confirmación por WhatsApp.
+
+// Cantidad de pases del invitado. Se pasa desde index.astro:
+//     <Confirmar pases={2} />
+// Así cada invitado puede tener su propia invitación con su número de pases.
+interface Props {
+    pases?: number;
+}
+
+const { pases = 1 } = Astro.props;
+
+const enLetras = [
+    "",
+    "un",
+    "dos",
+    "tres",
+    "cuatro",
+    "cinco",
+    "seis",
+    "siete",
+    "ocho",
+];
+const pasesEnLetras = enLetras[pases] ?? String(pases);
+
+const leyendaPases =
+    pases === 1
+        ? "Hemos reservado un lugar especialmente para ti"
+        : `Hemos reservado ${pasesEnLetras} lugares especialmente para ti`;
+
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const titulo = "QUERIDA FAMILIA Y AMIGOS";
+
+// Renglones cortos a propósito: con líneas largas el texto no podía crecer
+// sin desbordar los 398px de ancho útil.
+const parrafos = [
+    [
+        "Nos llena de felicidad poder",
+        "compartir con ustedes este",
+        "momento tan especial.",
+    ],
+    [
+        "Con la esperanza de que hagamos",
+        "de este día un recuerdo",
+        "inolvidable.",
+    ],
+    [
+        "Los esperamos con los corazones",
+        "llenos de emoción, listos para",
+        "celebrar con amor y crear",
+        "memorias que permanezcan",
+        "siempre en nuestros corazones.",
+    ],
+];
+
+const cierre = ["Esperamos contar con", "tu presencia"];
+const despedida = "TE ESPERAMOS";
+
+// ⚠️ CAMBIAR por el WhatsApp real de los novios (código de país + número, sin +)
+const whatsapp = "59100000000";
+// El mensaje sale armado con la cantidad de pases, así los novios saben
+// cuántos vienen sin tener que preguntar.
+const mensaje =
+    pases === 1
+        ? "Me complace confirmar mi asistencia a la boda de Stephanie y Jorge. Nos vemos el sábado 29 de agosto. ¡Estaré sin falta!"
+        : `Nos complace confirmar nuestra asistencia a la boda de Stephanie y Jorge: asistiremos ${pasesEnLetras} personas. Nos vemos el sábado 29 de agosto. ¡Allí estaremos!`;
+
+const enlace = `https://wa.me/${whatsapp}?text=${encodeURIComponent(mensaje)}`;
+
+const textoBoton = "CONFIRMAR ASISTENCIA";
+// ──────────────────────────────────────────────────────────────
+---
+
+<section
+    id="franja-confirmar"
+    class="franja relative w-full py-8 px-7 overflow-hidden"
+>
+    <div class="franja-fondo absolute inset-0 bg-vino"></div>
+
+    <h2
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.75rem,3.8vw,1.02rem)] tracking-[0.12em]"
+    >
+        {titulo}
+    </h2>
+</section>
+
+<section id="confirmar" class="w-full px-4 pt-14 pb-24 text-center">
+    <div class="space-y-4">
+        {
+            parrafos.map((parrafo) => (
+                <p class="font-balham text-marron text-[clamp(1rem,5.6vw,1.5rem)] leading-[1.5]">
+                    {parrafo.map((linea) => (
+                        <span class="block whitespace-nowrap">{linea}</span>
+                    ))}
+                </p>
+            ))
+        }
+    </div>
+
+    <p
+        class="font-balham text-marron text-[clamp(1rem,5.6vw,1.5rem)] leading-[1.5] mt-7"
+    >
+        {cierre.map((linea) => <span class="block whitespace-nowrap">{linea}</span>)}
+    </p>
+
+    <a
+        href={enlace}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block mt-5 px-8 py-2 rounded-full bg-marron text-crema font-callingstone text-[clamp(0.6rem,2.83vw,0.76rem)] tracking-[0.22em] whitespace-nowrap shadow-[0_4px_12px_rgba(0,0,0,0.14)] transition-transform hover:scale-[1.04]"
+    >
+        {textoBoton}
+    </a>
+
+    <!-- Pases reservados para este invitado -->
+    <div
+        class="mx-auto mt-12 max-w-[300px] rounded-2xl bg-vino px-6 py-5 shadow-[0_8px_20px_rgba(0,0,0,0.16)]"
+    >
+        <p
+            class="font-callingstone text-crema text-[clamp(0.58rem,2.7vw,0.74rem)] tracking-[0.24em] whitespace-nowrap"
+        >
+            {pases === 1 ? "PASE RESERVADO" : "PASES RESERVADOS"}
+        </p>
+
+        <p class="font-adelia text-crema text-[clamp(1.8rem,9vw,2.5rem)] leading-none mt-3">
+            {pases}
+        </p>
+
+        <p
+            class="font-balham text-crema/95 text-[clamp(0.95rem,4.7vw,1.28rem)] leading-[1.5] mt-3"
+        >
+            {leyendaPases}
+        </p>
+    </div>
+
+    <p
+        class="font-callingstone text-vino text-[clamp(0.9rem,4.6vw,1.24rem)] tracking-[0.14em] mt-12"
+    >
+        {despedida}
+    </p>
+</section>
+
+<script>
+    import { animarEntrada, animarFranja } from "../scripts/animaciones";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const franja = document.getElementById("franja-confirmar");
+        if (franja) animarFranja(franja);
+
+        const seccion = document.getElementById("confirmar");
+        if (seccion) animarEntrada(seccion.children, seccion);
+    });
+</script>

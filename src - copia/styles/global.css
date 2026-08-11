@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════
+   PALETA DE LA INVITACIÓN  (usar como bg-vino, text-marron...)
+   ═══════════════════════════════════════════════════════════ */
+@theme {
+  --color-vino: #8e2325;
+  --color-marron: #6a4925;
+  --color-crema: #f7f5f6;
+  --color-papel: #f5f3f2;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ICONOS PNG COLOREADOS (se pintan con máscara, no con filtros)
+   Uso: <span class="icono icono-marron" style="--ic:url('/iconos/cena.png')"></span>
+   ═══════════════════════════════════════════════════════════ */
+.icono {
+  display: inline-block;
+  -webkit-mask-image: var(--ic);
+  mask-image: var(--ic);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.icono-marron {
+  background-color: #6a4925;
+}
+
+.icono-crema {
+  background-color: #f7f5f6;
+}
+
+
+/* Fuente personalizada Tangerine */
+@font-face {
+  font-family: 'Tangerine Bold';
+  src: url('/fonts/Tangerine_Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+.font-tangerine {
+  font-family: 'Tangerine Bold', cursive !important;
+}
+
+/* Fuente personalizada Adelia */
+@font-face {
+  font-family: 'Adelia';
+  src: url('/fonts/adelia.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-adelia {
+  font-family: 'Adelia', cursive !important;
+}
+
+/* Fuente personalizada Balham */
+@font-face {
+  font-family: 'Balham';
+  src: url('/fonts/Balham.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-balham {
+  font-family: 'Balham', serif !important;
+}
+
+/* Fuente personalizada Callingstone */
+@font-face {
+  font-family: 'Callingstone';
+  src: url('/fonts/Callingstone - Personal Use Only.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-callingstone {
+  font-family: 'Callingstone', cursive !important;
+}
+
+/* Para el nombre */
+.font-great-vibes {
+  font-family: 'Great Vibes', cursive !important;
+}
+
+/* Para mis XV años */
+.font-crimson {
+  font-family: 'Crimson Text', serif !important;
+}
+
+/* Para dedicatoria*/
+.font-cormorant {
+  font-family: 'Cormorant Garamond', serif !important;
+}
+
+/*Para texto con Charm */
+.font-charm {
+  font-family: 'Charm', cursive !important;
+}
