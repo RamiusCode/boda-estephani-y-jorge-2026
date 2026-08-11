@@ -24,8 +24,10 @@ const enLetras = [
 ];
 const pasesEnLetras = enLetras[pases] ?? String(pases);
 
-const etiquetaPases =
-    pases === 1 ? "PASE PARA 1 PERSONA" : `PASE PARA ${pases} PERSONAS`;
+const leyendaPases =
+    pases === 1
+        ? "Hemos reservado un lugar especialmente para ti"
+        : `Hemos reservado ${pasesEnLetras} lugares especialmente para ti`;
 
 // ── DATOS EDITABLES ───────────────────────────────────────────
 const titulo = "QUERIDA FAMILIA Y AMIGOS";
@@ -52,6 +54,7 @@ const parrafos = [
     ],
 ];
 
+const cierre = ["Esperamos contar con", "tu presencia"];
 const despedida = "TE ESPERAMOS";
 
 // ⚠️ CAMBIAR por el WhatsApp real de los novios (código de país + número, sin +)
@@ -95,24 +98,44 @@ const textoBoton = "CONFIRMAR ASISTENCIA";
         }
     </div>
 
+    <p
+        class="font-balham text-marron text-[clamp(0.9rem,4.8vw,1.3rem)] leading-[1.5] mt-7"
+    >
+        {cierre.map((linea) => <span class="block whitespace-nowrap">{linea}</span>)}
+    </p>
+
     <a
         href={enlace}
         target="_blank"
         rel="noopener noreferrer"
-        class="block w-full max-w-[285px] mx-auto mt-7 px-6 py-3.5 rounded-[10px] bg-marron text-crema font-callingstone text-[clamp(0.7rem,3.1vw,0.84rem)] tracking-[0.18em] whitespace-nowrap shadow-[0_4px_12px_rgba(0,0,0,0.14)] transition-transform hover:scale-[1.04]"
+        class="inline-block mt-5 px-8 py-2 rounded-full bg-marron text-crema font-callingstone text-[clamp(0.6rem,2.83vw,0.76rem)] tracking-[0.22em] whitespace-nowrap shadow-[0_4px_12px_rgba(0,0,0,0.14)] transition-transform hover:scale-[1.04]"
     >
         {textoBoton}
     </a>
 
     <!-- Pases reservados para este invitado -->
-    <p
-        class="inline-block mt-4 px-4 py-2.5 rounded-md bg-marron text-crema font-callingstone text-[clamp(0.5rem,2.3vw,0.62rem)] tracking-[0.12em] whitespace-nowrap"
+    <div
+        class="mx-auto mt-12 max-w-[300px] rounded-2xl bg-vino px-6 py-5 shadow-[0_8px_20px_rgba(0,0,0,0.16)]"
     >
-        {etiquetaPases}
-    </p>
+        <p
+            class="font-callingstone text-crema text-[clamp(0.58rem,2.7vw,0.74rem)] tracking-[0.24em] whitespace-nowrap"
+        >
+            {pases === 1 ? "PASE RESERVADO" : "PASES RESERVADOS"}
+        </p>
+
+        <p class="font-adelia text-crema text-[clamp(1.8rem,9vw,2.5rem)] leading-none mt-3">
+            {pases}
+        </p>
+
+        <p
+            class="font-balham text-crema/95 text-[clamp(0.95rem,4.7vw,1.28rem)] leading-[1.5] mt-3"
+        >
+            {leyendaPases}
+        </p>
+    </div>
 
     <p
-        class="font-balham text-marron text-[clamp(0.9rem,4.8vw,1.3rem)] leading-[1.5] mt-12"
+        class="font-callingstone text-vino text-[clamp(0.9rem,4.6vw,1.24rem)] tracking-[0.14em] mt-12"
     >
         {despedida}
     </p>

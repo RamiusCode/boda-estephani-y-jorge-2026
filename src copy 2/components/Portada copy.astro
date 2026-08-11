@@ -1,17 +1,11 @@
 ---
-// src/components/Portada.astro - Portada en dos pasos:
-//   1. arco vino con los nombres + botón de ingreso (arranca la música)
-//   2. el sobre: se toca para abrir la invitación
+// src/components/Portada.astro - Portada: arco vino con los nombres + botón de ingreso
 // ── DATOS EDITABLES ───────────────────────────────────────────
 const anuncio = "¡ NOS CASAMOS !";
 const monograma = "SJ";
-// Los nombres van separados porque el "&" lleva su propia fuente: en Adelia
-// el ampersand se confunde con las letras de al lado y no se lee.
-const novia = "Stephanie";
-const novio = "Jorge";
+const novios = "Stephanie & Jorge";
 const invitado = "Señor: Sebastian Rocabado";
 const textoBoton = "Ingresar a la Invitación";
-const textoSobre = "Toca el sobre para abrir la invitación";
 // ──────────────────────────────────────────────────────────────
 ---
 
@@ -22,20 +16,15 @@ const textoSobre = "Toca el sobre para abrir la invitación";
     position: fixed;
     inset: 0;
     background: #ffffff;
-    z-index: 8499;
+    z-index: 9999;
     opacity: 1;
     pointer-events: none;
 "
 >
 </div>
 
-<!--
-   La portada va por debajo del botón flotante de música (z 9000): en la
-   pantalla del sobre la melodía ya suena y el invitado tiene que poder
-   pausarla sin haber entrado todavía a la invitación.
--->
 <section
-    class="fixed inset-0 w-full h-screen flex justify-center z-[8500]"
+    class="fixed inset-0 w-full h-screen flex justify-center z-[10000]"
     id="portada-section"
     style="background-color: #e9e4dd;"
 >
@@ -97,10 +86,7 @@ const textoSobre = "Toca el sobre para abrir la invitación";
             <h1
                 class="font-adelia text-crema text-[clamp(1.5rem,7vw,1.9rem)] leading-[1.35] mt-[42.5px] whitespace-nowrap"
             >
-                {novia}<span
-                    class="font-crimson italic text-[1.25em] mx-[0.16em] align-[-0.02em]"
-                    >&amp;</span
-                >{novio}
+                {novios}
             </h1>
 
             <p
@@ -118,88 +104,10 @@ const textoSobre = "Toca el sobre para abrir la invitación";
         >
             {textoBoton}
         </button>
-
-        <!--
-           PANTALLA 2 — El sobre. Va encima de la primera, centrada en la
-           misma columna, y recién se muestra cuando la primera termina de
-           salir. Arranca oculta para que no tape el botón de ingreso.
-        -->
-        <div
-            id="pantalla-sobre"
-            class="absolute inset-0 flex flex-col items-center justify-center px-6 opacity-0 pointer-events-none"
-        >
-            <!-- BLOQUE ARCO + SOBRE (compensa el arco que sobresale a la izquierda) -->
-            <div class="bloque-sobre">
-                <div
-                    id="sobre-container"
-                    class="relative w-full cursor-pointer select-none"
-                >
-                    <!-- Arco vino (detrás) -->
-                    <div id="arco-sobre" class="arco-vino"></div>
-
-                    <!-- Sobre -->
-                    <img
-                        id="sobre-img"
-                        src="/imagenes/sobre.png"
-                        alt="Sobre de invitación"
-                        width="370"
-                        height="545"
-                        class="relative block w-full h-auto z-[2]"
-                    />
-                </div>
-            </div>
-
-            <!-- Instrucción -->
-            <p id="instruccion" class="instruccion font-balham">
-                {textoSobre}
-            </p>
-        </div>
     </div>
 </section>
 
 <style>
-    /*
-       El arco sobresale 14% hacia la izquierda del sobre, así que el bloque
-       se desplaza la mitad de ese excedente (7%) para que el conjunto
-       arco + sobre quede ópticamente centrado en la columna.
-    */
-    .bloque-sobre {
-        width: 100%;
-        max-width: 270px;
-        transform: translateX(7%);
-    }
-
-    /* Arco vino: rectángulo con la parte superior semicircular */
-    .arco-vino {
-        position: absolute;
-        top: -25%;
-        bottom: 15%;
-        left: -14%;
-        width: 106%;
-        background-color: var(--color-vino);
-        border-radius: 9999px 9999px 0 0;
-        z-index: 1;
-    }
-
-    /* Sombra suave del sobre sobre el arco */
-    #sobre-img {
-        filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.22));
-    }
-
-    /*
-       El pie va en un solo renglón como en el PDF: con el cuerpo de antes
-       (0.78rem) la frase partía en dos líneas dentro de la columna de 430px.
-    */
-    .instruccion {
-        margin-top: 2.5rem;
-        text-align: center;
-        color: var(--color-marron);
-        font-size: clamp(0.6rem, 2.6vw, 0.75rem);
-        letter-spacing: 0.18em;
-        line-height: 1.9;
-        text-transform: uppercase;
-    }
-
     body.portada-activa {
         overflow: hidden !important;
         height: 100vh !important;
@@ -280,72 +188,14 @@ const textoSobre = "Toca el sobre para abrir la invitación";
                 gsap.to(boton, { scale: 1, duration: 0.3, ease: "power2.out" });
             });
 
+            // ── Click en el botón ───────────────────────────────────
             const portadaSection = document.getElementById("portada-section");
             const capaBlanca = document.getElementById("capa-blanca");
-            const pantallaSobre = document.getElementById("pantalla-sobre");
-            const sobreContainer = document.getElementById("sobre-container");
 
-            // ── Pantalla 2: el sobre ────────────────────────────────
-            // Entra igual que el arco de arriba: crece desde abajo y el
-            // sobre aparece recién cuando el arco ya terminó de crecer.
-            const mostrarSobre = () => {
-                if (!pantallaSobre) return;
-
-                // La primera pantalla queda invisible pero sigue en el DOM:
-                // sin esto se comería los clicks del sobre.
-                gsap.set([arco, boton], { pointerEvents: "none" });
-
-                pantallaSobre.classList.remove("pointer-events-none");
-                gsap.set(pantallaSobre, { opacity: 1 });
-                gsap.set("#arco-sobre", {
-                    scaleY: 0,
-                    transformOrigin: "bottom center",
-                    opacity: 0,
-                });
-                gsap.set("#sobre-img", { opacity: 0, y: 40, scale: 0.94 });
-                gsap.set("#instruccion", { opacity: 0, y: 12 });
-
-                gsap.timeline()
-                    .to("#arco-sobre", {
-                        scaleY: 1,
-                        opacity: 1,
-                        duration: 0.9,
-                        ease: "power3.out",
-                    })
-                    .to(
-                        "#sobre-img",
-                        {
-                            opacity: 1,
-                            y: 0,
-                            scale: 1,
-                            duration: 0.9,
-                            ease: "power2.out",
-                        },
-                        0.35,
-                    )
-                    .to(
-                        "#instruccion",
-                        { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" },
-                        0.8,
-                    )
-                    // Latido sutil del sobre (invita a tocarlo)
-                    .add(() => {
-                        gsap.to("#sobre-img", {
-                            y: -8,
-                            duration: 2.4,
-                            repeat: -1,
-                            yoyo: true,
-                            ease: "sine.inOut",
-                        });
-                    });
-            };
-
-            // ── Click en el botón: arranca la música y trae el sobre ──
             boton.addEventListener("click", () => {
                 gsap.killTweensOf(boton);
 
-                // La melodía ya suena en la pantalla del sobre; el botón
-                // flotante de BotonMusica.astro aparece solo al detectarla.
+                // Música
                 const audio = new Audio("/musica/melodia2.mp3");
                 audio.loop = true;
                 audio.volume = 0.5;
@@ -355,7 +205,9 @@ const textoSobre = "Toca el sobre para abrir la invitación";
                 (window as any).audioGlobal = audio;
                 (window as any).estaReproduciendoGlobal = true;
 
-                gsap.timeline({ onComplete: mostrarSobre })
+                const tlSalida = gsap.timeline();
+
+                tlSalida
                     .to(boton, {
                         y: 0,
                         scale: 1.06,
@@ -387,65 +239,6 @@ const textoSobre = "Toca el sobre para abrir la invitación";
                             ease: "power2.in",
                         },
                         0.55,
-                    );
-            });
-
-            // ── Hover del sobre ─────────────────────────────────────
-            sobreContainer?.addEventListener("mouseenter", () => {
-                gsap.to(sobreContainer, {
-                    scale: 1.04,
-                    duration: 0.3,
-                    ease: "power2.out",
-                });
-            });
-            sobreContainer?.addEventListener("mouseleave", () => {
-                gsap.to(sobreContainer, {
-                    scale: 1,
-                    duration: 0.3,
-                    ease: "power2.out",
-                });
-            });
-
-            // ── Click en el sobre: se abre la invitación ─────────────
-            sobreContainer?.addEventListener("click", () => {
-                gsap.killTweensOf("#sobre-img");
-
-                gsap.timeline()
-                    .to("#sobre-img", {
-                        y: 0,
-                        scale: 1.08,
-                        duration: 0.25,
-                        ease: "power2.in",
-                    })
-                    .to(
-                        "#instruccion",
-                        {
-                            opacity: 0,
-                            y: -10,
-                            duration: 0.35,
-                            ease: "power2.in",
-                        },
-                        0.1,
-                    )
-                    .to(
-                        "#sobre-img",
-                        {
-                            opacity: 0,
-                            scale: 1.35,
-                            duration: 0.45,
-                            ease: "power2.in",
-                        },
-                        0.3,
-                    )
-                    .to(
-                        "#arco-sobre",
-                        {
-                            scaleY: 0,
-                            opacity: 0,
-                            duration: 0.5,
-                            ease: "power2.in",
-                        },
-                        0.35,
                     )
                     .to(
                         portadaSection,
@@ -471,7 +264,7 @@ const textoSobre = "Toca el sobre para abrir la invitación";
                                 window.scrollTo({ top: 0, behavior: "smooth" });
                             },
                         },
-                        0.6,
+                        0.8,
                     );
             });
         });

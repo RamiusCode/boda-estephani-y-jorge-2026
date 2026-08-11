@@ -5,10 +5,7 @@
 // ── DATOS EDITABLES ───────────────────────────────────────────
 const anuncio = "¡ NOS CASAMOS !";
 const monograma = "SJ";
-// Los nombres van separados porque el "&" lleva su propia fuente: en Adelia
-// el ampersand se confunde con las letras de al lado y no se lee.
-const novia = "Stephanie";
-const novio = "Jorge";
+const novios = "Stephanie & Jorge";
 const invitado = "Señor: Sebastian Rocabado";
 const textoBoton = "Ingresar a la Invitación";
 const textoSobre = "Toca el sobre para abrir la invitación";
@@ -97,10 +94,7 @@ const textoSobre = "Toca el sobre para abrir la invitación";
             <h1
                 class="font-adelia text-crema text-[clamp(1.5rem,7vw,1.9rem)] leading-[1.35] mt-[42.5px] whitespace-nowrap"
             >
-                {novia}<span
-                    class="font-crimson italic text-[1.25em] mx-[0.16em] align-[-0.02em]"
-                    >&amp;</span
-                >{novio}
+                {novios}
             </h1>
 
             <p

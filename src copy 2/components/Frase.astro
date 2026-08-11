@@ -1,0 +1,30 @@
+﻿---
+// src/components/Frase.astro
+// Banda vino con la frase de apertura.
+// ── DATO EDITABLE ─────────────────────────────────────────────
+const frase = ["A VECES LO QUE EMPIEZA COMO UNA LOCURA", "SE CONVIERTE EN LO MEJOR DE TU VIDA"];
+// ──────────────────────────────────────────────────────────────
+---
+
+{/*
+   El fondo vino va en su propia capa para poder animarlo aparte del texto
+   sin mover nada de sitio: la sección conserva su alto y el texto no salta.
+*/}
+<section id="franja-frase" class="franja relative w-full py-9 px-4 mt-12 overflow-hidden">
+    <div class="franja-fondo absolute inset-0 bg-vino"></div>
+
+    <p
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.6rem,3.05vw,0.83rem)] tracking-[0.06em] leading-[2]"
+    >
+        {frase.map((linea) => <span class="block whitespace-nowrap">{linea}</span>)}
+    </p>
+</section>
+
+<script>
+    import { animarFranja } from "../scripts/animaciones";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const franja = document.getElementById("franja-frase");
+        if (franja) animarFranja(franja);
+    });
+</script>

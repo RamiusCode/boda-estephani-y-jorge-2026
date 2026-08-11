@@ -15,6 +15,7 @@ const momentos = [
     { nombre: ["CENA"], hora: "16:00 P.M.", icono: "cena.png" },
     { nombre: ["TORTA"], hora: "17:00 P.M.", icono: "torta.png" },
     { nombre: ["PARTY"], hora: "17:30 P.M.", icono: "party.png" },
+    { nombre: ["LIGA Y BOUQUET"], hora: "19:00 P.M.", icono: "liga.png" },
     { nombre: ["DESPEDIDA", "NOVIOS"], hora: "21:30 P.M.", icono: "despedida.png" },
 ];
 // ──────────────────────────────────────────────────────────────
@@ -40,27 +41,20 @@ const momentos = [
 
         {
             momentos.map((momento, i) => (
-                // Cada momento sube 16px (~15% de su alto) sobre el anterior:
-                // como se alternan izquierda y derecha, se encabalgan sin
-                // pisarse y la línea queda mucho más compacta.
-                <div
-                    class={`momento relative grid grid-cols-2 gap-3 ${
-                        i > 0 ? "-mt-4" : ""
-                    }`}
-                >
+                <div class="momento relative grid grid-cols-2 gap-3">
                     {/*
                        Tramo horizontal que sale de la línea central hacia el
                        lado donde está el ítem, a la altura del centro del
-                       icono (la mitad de sus 40px).
+                       icono (la mitad de sus 46px).
                     */}
                     <span
-                        class={`absolute top-[20px] h-px w-[14px] bg-vino ${
+                        class={`absolute top-[23px] h-px w-[14px] bg-vino ${
                             i % 2 === 0 ? "left-1/2" : "right-1/2"
                         }`}
                     />
 
                     {/* Punto sobre la línea central, en el arranque del tramo */}
-                    <span class="absolute left-1/2 top-[20px] -translate-x-1/2 -translate-y-1/2 w-[4px] h-[4px] rounded-full bg-vino" />
+                    <span class="absolute left-1/2 top-[23px] -translate-x-1/2 -translate-y-1/2 w-[4px] h-[4px] rounded-full bg-vino" />
 
                     <div
                         class={`flex flex-col items-center text-center ${
@@ -68,11 +62,11 @@ const momentos = [
                         }`}
                     >
                         <span
-                            class="icono icono-marron w-[40px] h-[40px]"
+                            class="icono icono-marron w-[46px] h-[46px]"
                             style={`--ic: url('/imagenes/${momento.icono}')`}
                             aria-hidden="true"
                         />
-                        <h3 class="font-callingstone text-vino text-[clamp(0.57rem,2.8vw,0.75rem)] tracking-[0.1em] leading-[1.7] mt-2">
+                        <h3 class="font-callingstone text-vino text-[clamp(0.6rem,2.95vw,0.79rem)] tracking-[0.1em] leading-[1.2] mt-1">
                             {momento.nombre.map((linea) => (
                                 <span class="block whitespace-nowrap">{linea}</span>
                             ))}

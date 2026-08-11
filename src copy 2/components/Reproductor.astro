@@ -1,0 +1,218 @@
+---
+// src/components/Reproductor.astro
+// Reproductor visual de la melodía. Se sincroniza con el audio que arranca
+// la portada al tocar el sobre (window.audioGlobal).
+---
+
+<section class="w-full flex justify-center py-12 px-8">
+    <div class="w-full max-w-[290px]">
+        <!-- Corazón sobre el extremo derecho de la barra -->
+        <div class="flex justify-end pr-1 mb-2">
+            <svg
+                class="w-[22px] h-[22px]"
+                viewBox="0 0 24 24"
+                fill="#6a4925"
+                aria-hidden="true"
+            >
+                <path
+                    d="M12 21s-7.5-4.7-9.3-9A5.3 5.3 0 0 1 12 6.5 5.3 5.3 0 0 1 21.3 12c-1.8 4.3-9.3 9-9.3 9z"
+                ></path>
+            </svg>
+        </div>
+
+        <!-- Barra de progreso -->
+        <div id="barra-audio" class="relative h-4 flex items-center cursor-pointer">
+            <div class="w-full h-[2px] bg-marron/70 rounded-full"></div>
+            <div
+                id="barra-progreso"
+                class="absolute left-0 h-[2px] bg-marron rounded-full"
+                style="width: 0%"
+            >
+            </div>
+            <span
+                id="barra-punto"
+                class="absolute w-[11px] h-[11px] rounded-full bg-marron -translate-x-1/2"
+                style="left: 0%"
+            >
+            </span>
+        </div>
+
+        <!-- Tiempos -->
+        <div
+            class="flex justify-between font-balham text-marron text-[0.72rem] tracking-wider mt-1.5"
+        >
+            <span id="tiempo-actual">0:00</span>
+            <span id="tiempo-total">3:17</span>
+        </div>
+
+        <!-- Controles -->
+        <div class="flex items-center justify-center gap-7 mt-7 text-marron">
+            <!-- Aleatorio -->
+            <svg
+                class="w-[22px] h-[22px]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <path d="M16 3h5v5"></path>
+                <path d="M4 20 21 3"></path>
+                <path d="M21 16v5h-5"></path>
+                <path d="M15 15l6 6"></path>
+                <path d="M4 4l5 5"></path>
+            </svg>
+
+            <!-- Anterior (reinicia la melodía) -->
+            <button
+                id="audio-inicio"
+                type="button"
+                aria-label="Volver al inicio"
+                class="cursor-pointer"
+            >
+                <svg
+                    class="w-[22px] h-[22px]"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                >
+                    <path d="M6 5h2.2v14H6z"></path>
+                    <path d="M20 5v14L9.5 12z"></path>
+                </svg>
+            </button>
+
+            <!-- Play / Pausa -->
+            <button
+                id="audio-toggle"
+                type="button"
+                aria-label="Reproducir o pausar"
+                class="w-[42px] h-[42px] rounded-full bg-marron text-crema flex items-center justify-center cursor-pointer transition-transform hover:scale-105"
+            >
+                <svg
+                    id="icono-play"
+                    class="w-[18px] h-[18px] ml-[2px]"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                >
+                    <path d="M7 4.5v15L20 12z"></path>
+                </svg>
+                <svg
+                    id="icono-pausa"
+                    class="w-[16px] h-[16px] hidden"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                >
+                    <path d="M6 4.5h4v15H6zM14 4.5h4v15h-4z"></path>
+                </svg>
+            </button>
+
+            <!-- Siguiente (reinicia la melodía) -->
+            <button
+                id="audio-siguiente"
+                type="button"
+                aria-label="Reiniciar melodía"
+                class="cursor-pointer"
+            >
+                <svg
+                    class="w-[22px] h-[22px]"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                >
+                    <path d="M4 5v14l10.5-7z"></path>
+                    <path d="M15.8 5H18v14h-2.2z"></path>
+                </svg>
+            </button>
+
+            <!-- Repetir -->
+            <svg
+                class="w-[22px] h-[22px]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <path d="M17 2l4 4-4 4"></path>
+                <path d="M3 11v-1a4 4 0 0 1 4-4h14"></path>
+                <path d="M7 22l-4-4 4-4"></path>
+                <path d="M21 13v1a4 4 0 0 1-4 4H3"></path>
+            </svg>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const barra = document.getElementById("barra-audio");
+        const progreso = document.getElementById("barra-progreso");
+        const punto = document.getElementById("barra-punto");
+        const actual = document.getElementById("tiempo-actual");
+        const total = document.getElementById("tiempo-total");
+        const btnToggle = document.getElementById("audio-toggle");
+        const btnInicio = document.getElementById("audio-inicio");
+        const btnSiguiente = document.getElementById("audio-siguiente");
+        const iconoPlay = document.getElementById("icono-play");
+        const iconoPausa = document.getElementById("icono-pausa");
+
+        const fmt = (s: number) => {
+            if (!isFinite(s)) return "0:00";
+            const m = Math.floor(s / 60);
+            const r = Math.floor(s % 60);
+            return `${m}:${r.toString().padStart(2, "0")}`;
+        };
+
+        const pintarEstado = (sonando: boolean) => {
+            iconoPlay?.classList.toggle("hidden", sonando);
+            iconoPausa?.classList.toggle("hidden", !sonando);
+        };
+
+        // La portada crea el audio al tocar el sobre: lo esperamos.
+        const esperar = setInterval(() => {
+            const audio = (window as any).audioGlobal as
+                | HTMLAudioElement
+                | undefined;
+            if (!audio) return;
+            clearInterval(esperar);
+
+            const refrescar = () => {
+                if (!audio.duration) return;
+                const pct = (audio.currentTime / audio.duration) * 100;
+                if (progreso) progreso.style.width = `${pct}%`;
+                if (punto) punto.style.left = `${pct}%`;
+                if (actual) actual.textContent = fmt(audio.currentTime);
+                if (total) total.textContent = fmt(audio.duration);
+            };
+
+            audio.addEventListener("timeupdate", refrescar);
+            audio.addEventListener("loadedmetadata", refrescar);
+            audio.addEventListener("play", () => pintarEstado(true));
+            audio.addEventListener("pause", () => pintarEstado(false));
+            refrescar();
+            pintarEstado(!audio.paused);
+
+            btnToggle?.addEventListener("click", () => {
+                if (audio.paused) audio.play();
+                else audio.pause();
+                (window as any).estaReproduciendoGlobal = !audio.paused;
+            });
+
+            const reiniciar = () => {
+                audio.currentTime = 0;
+                audio.play();
+            };
+            btnInicio?.addEventListener("click", reiniciar);
+            btnSiguiente?.addEventListener("click", reiniciar);
+
+            barra?.addEventListener("click", (e) => {
+                const caja = barra.getBoundingClientRect();
+                const pct = (e.clientX - caja.left) / caja.width;
+                if (audio.duration)
+                    audio.currentTime = Math.min(
+                        Math.max(pct, 0),
+                        1,
+                    ) * audio.duration;
+            });
+        }, 200);
+    });
+</script>
