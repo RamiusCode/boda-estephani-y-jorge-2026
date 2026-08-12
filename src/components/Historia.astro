@@ -125,9 +125,14 @@ const parrafos = [
             </svg>
         </button>
 
+        <!--
+           overscroll-contain corta el encadenado: al llegar al tope o al
+           fondo de la historia, lo que sobra del gesto se queda acá y no
+           pasa a mover la invitación de atrás.
+        -->
         <div
             id="modal-scroll"
-            class="flex-1 min-h-0 overflow-y-auto px-7 pt-10 pb-9"
+            class="flex-1 min-h-0 overflow-y-auto overscroll-contain px-7 pt-10 pb-9"
         >
             <h3
                 id="modal-historia-titulo"
@@ -223,6 +228,38 @@ const parrafos = [
         const menosMovimiento = () =>
             window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+        /*
+           Bloqueo del fondo mientras el modal está abierto.
+
+           Va en <html> además de en <body>: el que scrollea es <html> —es
+           donde el Layout declara el overflow—, así que tocar sólo <body>
+           no lo frenaba y la invitación de atrás se seguía moviendo.
+        */
+        const bloquearFondo = () => {
+            document.documentElement.style.overflow = "hidden";
+            document.body.style.overflow = "hidden";
+            modal.addEventListener("touchmove", frenarGestoFuera, {
+                passive: false,
+            });
+        };
+
+        const liberarFondo = () => {
+            document.documentElement.style.overflow = "";
+            document.body.style.overflow = "";
+            modal.removeEventListener("touchmove", frenarGestoFuera);
+        };
+
+        /*
+           Safari en iOS ignora el overflow:hidden para el gesto táctil, así
+           que el dedo sobre el velo o los bordes del panel igual arrastra la
+           página. Se corta cancelando el gesto salvo cuando nace dentro de
+           la historia, que es lo único que tiene que poder scrollear.
+        */
+        function frenarGestoFuera(e: TouchEvent) {
+            if (cuerpo?.contains(e.target as Node)) return;
+            e.preventDefault();
+        }
+
         // La apertura se rehace en cada click, no se guarda: así el invitado
         // ve la historia armarse de nuevo cada vez que abre el modal.
         let apertura: gsap.core.Timeline | null = null;
@@ -239,7 +276,7 @@ const parrafos = [
         const abrirModal = () => {
             modal.classList.remove("hidden");
             modal.classList.add("flex");
-            document.body.style.overflow = "hidden";
+            bloquearFondo();
             if (cuerpo) cuerpo.scrollTop = 0;
 
             apertura?.kill();
@@ -340,7 +377,7 @@ const parrafos = [
                 onComplete: () => {
                     modal.classList.add("hidden");
                     modal.classList.remove("flex");
-                    document.body.style.overflow = "";
+                    liberarFondo();
                     // El panel queda limpio para que la próxima apertura
                     // arranque de cero y no herede el blur del cierre.
                     gsap.set(panel, { clearProps: "all" });
