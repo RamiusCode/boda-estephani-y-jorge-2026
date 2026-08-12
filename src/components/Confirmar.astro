@@ -55,13 +55,20 @@ const parrafos = [
 const despedida = "TE ESPERAMOS";
 
 // WhatsApp de los novios (código de país + número, sin + ni espacios).
-const whatsapp = "59161006490";
-// El mensaje solo cambia de singular a plural según los pases; no menciona
-// la cantidad de personas ni la hora.
+const whatsapp = "59163001482";
+/*
+   Un solo mensaje para todos, sirva la invitación para uno o para varios.
+   Está escrito sin posesivo ("la asistencia", no "mi asistencia") y sin
+   conjugar al invitado: el único verbo suyo es "confirmo", que va en
+   singular siempre porque quien escribe el WhatsApp es una sola persona
+   aunque venga acompañada. El "nos vemos" es invitado + novios, así que
+   también es correcto en cualquier caso.
+
+   Así no hay forma de que a alguien le llegue el texto en el número
+   equivocado por olvidarse de ajustar los pases en index.astro.
+*/
 const mensaje =
-    pases === 1
-        ? "Me complace confirmar mi asistencia a la boda de Stephanie y Jorge. Nos vemos el sábado 29 de agosto. ¡Estaré sin falta!"
-        : "Nos complace confirmar nuestra asistencia a la boda de Stephanie y Jorge. Nos vemos el sábado 29 de agosto. ¡Allí estaremos!";
+    "Confirmo la asistencia a la boda de Stephanie y Jorge. Nos vemos el sábado 29 de agosto. ¡Será un placer acompañarlos!";
 
 const enlace = `https://wa.me/${whatsapp}?text=${encodeURIComponent(mensaje)}`;
 
