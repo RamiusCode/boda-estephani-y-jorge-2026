@@ -139,7 +139,7 @@ const parrafos = [
             <div class="mt-6 space-y-4">
                 {
                     parrafos.map((parrafo) => (
-                        <p class="font-balham text-marron text-[clamp(0.92rem,4.4vw,1.18rem)] leading-[1.7] text-center">
+                        <p class="historia-parrafo font-balham text-marron text-[clamp(0.92rem,4.4vw,1.18rem)] leading-[1.7] text-center">
                             {parrafo}
                         </p>
                     ))
@@ -215,38 +215,135 @@ const parrafos = [
         const fondo = document.getElementById("modal-fondo");
         const abrir = document.getElementById("abrir-historia");
         const cerrar = document.getElementById("cerrar-historia");
+        const titulo = document.getElementById("modal-historia-titulo");
+        const parrafos =
+            document.querySelectorAll<HTMLElement>(".historia-parrafo");
         if (!modal || !panel || !abrir) return;
 
-        // El scroll del fondo se bloquea mientras el modal está abierto para
-        // que el dedo mueva la historia y no la invitación de atrás.
+        const menosMovimiento = () =>
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        // La apertura se rehace en cada click, no se guarda: así el invitado
+        // ve la historia armarse de nuevo cada vez que abre el modal.
+        let apertura: gsap.core.Timeline | null = null;
+
+        /*
+           El modal no aparece de golpe: primero se oscurece el fondo, el
+           panel sube y sale de foco, y recién ahí el título abre las letras
+           y los párrafos caen uno atrás del otro. Ese escalonado es lo que
+           hace que se sienta un sobre abriéndose y no una ventana.
+
+           Todo el gesto son ~1,2s, pero el panel ya está entero a los 0,7s:
+           quien quiera leer ya de entrada no espera a que termine.
+        */
         const abrirModal = () => {
             modal.classList.remove("hidden");
             modal.classList.add("flex");
             document.body.style.overflow = "hidden";
             if (cuerpo) cuerpo.scrollTop = 0;
-            gsap.fromTo(fondo, { opacity: 0 }, { opacity: 1, duration: 0.3 });
-            gsap.fromTo(
-                panel,
-                { opacity: 0, y: 26, scale: 0.97 },
-                { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "power2.out" },
+
+            apertura?.kill();
+
+            if (menosMovimiento()) {
+                apertura = gsap.timeline();
+                apertura.fromTo(
+                    [fondo, panel],
+                    { opacity: 0 },
+                    { opacity: 1, duration: 0.35, ease: "power1.out" },
+                );
+                // Sin escalonado, título y párrafos tienen que quedar
+                // visibles sí o sí: se limpia lo que haya dejado una
+                // apertura anterior.
+                const contenido = [titulo, ...parrafos].filter(
+                    (pieza): pieza is HTMLElement => pieza !== null,
+                );
+                if (contenido.length > 0) {
+                    gsap.set(contenido, { clearProps: "all" });
+                }
+                return;
+            }
+
+            apertura = gsap.timeline();
+
+            apertura.fromTo(
+                fondo,
+                { opacity: 0 },
+                { opacity: 1, duration: 0.5, ease: "sine.out" },
+                0,
             );
+
+            apertura.fromTo(
+                panel,
+                { opacity: 0, y: 40, scale: 0.92, filter: "blur(8px)" },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    filter: "blur(0px)",
+                    duration: 0.75,
+                    // Rebote apenas insinuado, igual que los iconos del
+                    // cronograma: el panel se asienta, no golpea.
+                    ease: "back.out(1.2)",
+                },
+                0,
+            );
+
+            if (titulo) {
+                // Las letras arrancan muy abiertas y se cierran hasta su
+                // interletrado real: el título termina de "posarse".
+                apertura.fromTo(
+                    titulo,
+                    { opacity: 0, y: 10, letterSpacing: "0.5em" },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        letterSpacing: "0.16em",
+                        duration: 0.9,
+                        ease: "sine.out",
+                        clearProps: "letterSpacing",
+                    },
+                    0.3,
+                );
+            }
+
+            if (parrafos.length > 0) {
+                apertura.fromTo(
+                    parrafos,
+                    { opacity: 0, y: 18, filter: "blur(4px)" },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        filter: "blur(0px)",
+                        duration: 0.7,
+                        stagger: 0.11,
+                        ease: "sine.out",
+                    },
+                    0.45,
+                );
+            }
         };
 
         const cerrarModal = () => {
+            apertura?.kill();
+
             gsap.to(panel, {
                 opacity: 0,
-                y: 20,
-                scale: 0.98,
-                duration: 0.28,
+                y: 22,
+                scale: 0.96,
+                filter: "blur(6px)",
+                duration: 0.3,
                 ease: "power2.in",
             });
             gsap.to(fondo, {
                 opacity: 0,
-                duration: 0.28,
+                duration: 0.3,
                 onComplete: () => {
                     modal.classList.add("hidden");
                     modal.classList.remove("flex");
                     document.body.style.overflow = "";
+                    // El panel queda limpio para que la próxima apertura
+                    // arranque de cero y no herede el blur del cierre.
+                    gsap.set(panel, { clearProps: "all" });
                 },
             });
         };
