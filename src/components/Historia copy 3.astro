@@ -99,19 +99,15 @@ const parrafos = [
 >
     <div id="modal-fondo" class="absolute inset-0 bg-black/55"></div>
 
-    <!--
-       El panel no scrollea: scrollea el div de adentro. Así la X queda
-       anclada arriba a la derecha y no se va con el texto.
-    -->
     <div
         id="modal-panel"
-        class="relative flex flex-col w-full max-w-[390px] max-h-full overflow-hidden rounded-2xl bg-papel shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
+        class="relative w-full max-w-[390px] max-h-full overflow-y-auto rounded-2xl bg-papel px-7 pt-10 pb-9 shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
     >
         <button
             id="cerrar-historia"
             type="button"
             aria-label="Cerrar la historia"
-            class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full flex items-center justify-center bg-papel/85 backdrop-blur-sm text-vino cursor-pointer transition-transform hover:scale-110"
+            class="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center text-vino cursor-pointer transition-transform hover:scale-110"
         >
             <svg
                 class="w-[18px] h-[18px]"
@@ -125,26 +121,21 @@ const parrafos = [
             </svg>
         </button>
 
-        <div
-            id="modal-scroll"
-            class="flex-1 min-h-0 overflow-y-auto px-7 pt-10 pb-9"
+        <h3
+            id="modal-historia-titulo"
+            class="font-callingstone text-vino text-center text-[clamp(0.8rem,3.8vw,1.05rem)] tracking-[0.16em]"
         >
-            <h3
-                id="modal-historia-titulo"
-                class="font-callingstone text-vino text-center text-[clamp(0.8rem,3.8vw,1.05rem)] tracking-[0.16em]"
-            >
-                {titulo}
-            </h3>
+            {titulo}
+        </h3>
 
-            <div class="mt-6 space-y-4">
-                {
-                    parrafos.map((parrafo) => (
-                        <p class="font-balham text-marron text-[clamp(0.92rem,4.4vw,1.18rem)] leading-[1.7] text-center">
-                            {parrafo}
-                        </p>
-                    ))
-                }
-            </div>
+        <div class="mt-6 space-y-4">
+            {
+                parrafos.map((parrafo) => (
+                    <p class="font-balham text-marron text-[clamp(0.92rem,4.4vw,1.18rem)] leading-[1.7] text-center">
+                        {parrafo}
+                    </p>
+                ))
+            }
         </div>
     </div>
 </div>
@@ -211,7 +202,6 @@ const parrafos = [
 
         const modal = document.getElementById("modal-historia");
         const panel = document.getElementById("modal-panel");
-        const cuerpo = document.getElementById("modal-scroll");
         const fondo = document.getElementById("modal-fondo");
         const abrir = document.getElementById("abrir-historia");
         const cerrar = document.getElementById("cerrar-historia");
@@ -223,7 +213,7 @@ const parrafos = [
             modal.classList.remove("hidden");
             modal.classList.add("flex");
             document.body.style.overflow = "hidden";
-            if (cuerpo) cuerpo.scrollTop = 0;
+            panel.scrollTop = 0;
             gsap.fromTo(fondo, { opacity: 0 }, { opacity: 1, duration: 0.3 });
             gsap.fromTo(
                 panel,

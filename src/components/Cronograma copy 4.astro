@@ -93,63 +93,41 @@ const momentos = [
 <script>
     import { gsap } from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
-    import { animarFranja } from "../scripts/animaciones";
+    import { animarEntrada, animarFranja } from "../scripts/animaciones";
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Mismo arranque que el helper compartido, para que el cronograma entre
+    // Mismos valores que el helper compartido, para que el cronograma entre
     // con el mismo timing que el resto de la invitación.
     const ARRANQUE = "top 92%";
+    const ACCIONES = "restart none none reset";
 
     const menosMovimiento = () =>
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    /*
-       Cola de reproducción: los momentos entran siempre en orden y nunca
-       arrancan todos juntos. Cada uno, al entrar en pantalla, se anota acá.
-
-       El siguiente no espera a que el anterior termine: larga cuando el
-       anterior va por la mitad. Se solapan lo justo para que la línea se
-       sienta continua —una cae mientras la otra todavía se está asentando—
-       en vez de ir a los tirones, y la secuencia completa tarda casi la
-       mitad, así acompaña el scroll del invitado.
-    */
-    const RELEVO = 0.5; // en qué punto del anterior arranca el siguiente
-
-    let cola: Promise<void> = Promise.resolve();
-
-    function encolar(entrada: gsap.core.Timeline) {
-        cola = cola.then(
-            () =>
-                new Promise<void>((libre) => {
-                    entrada.restart();
-                    gsap.delayedCall(entrada.duration() * RELEVO, libre);
-                }),
-        );
-    }
 
     document.addEventListener("DOMContentLoaded", () => {
         const franja = document.getElementById("franja-cronograma");
         if (franja) animarFranja(franja);
 
         /*
-           Cada momento tiene su propio trigger, pero la animación no corre
-           ahí: se encola. Así entran estrictamente uno por uno y en orden,
-           cada uno arrancando recién cuando el anterior terminó.
+           Cada momento se dispara con su propio trigger en vez de escalonar
+           los diez a la vez: la lista es larga y, con un solo trigger, los
+           últimos se animarían estando todavía fuera de pantalla. Así además
+           entran uno por uno, en orden, al ritmo del scroll.
 
-           Dentro de cada momento las piezas entran encadenadas y cada una
-           con su propio gesto, para que la línea de tiempo se arme sola
+           Dentro de cada momento las tres piezas entran encadenadas y cada
+           una con su propio gesto, para que la línea de tiempo se arme sola
            delante del invitado en vez de aparecer de golpe:
 
-             · el punto y el tramo abren sobre la línea central,
              · el icono llega desde su lado y asienta con un rebote corto,
              · el nombre lo sigue renglón por renglón,
              · la hora cierra soltando las letras desde muy separadas.
 
            El encadenado va lento a propósito (~1,4s de punta a punta) para
-           que se lea delicado.
+           que se lea delicado, pero cada pieza ya es legible mucho antes:
+           el invitado sigue bajando mientras mira y no espera nada.
 
-           El punto y el tramo no se desplazan: son parte de la línea, sólo
+           El punto y el tramo no se mueven: son parte de la línea, sólo
            aparecen, si no se despegarían del eje.
         */
         document.querySelectorAll<HTMLElement>(".momento").forEach((momento) => {
@@ -160,18 +138,23 @@ const momentos = [
                 momento.querySelectorAll<HTMLElement>(".momento-nombre");
             const hora = momento.querySelector<HTMLElement>(".momento-hora");
 
-            const piezas = [...marcas, icono, ...nombre, hora].filter(
+            animarEntrada(marcas, momento, { y: 0, stagger: 0, duration: 0.8 });
+
+            const piezas = [icono, ...nombre, hora].filter(
                 (pieza): pieza is HTMLElement => pieza !== null,
             );
             if (piezas.length === 0) return;
 
-            // Arranca pausada: la dispara la cola, no el trigger.
-            const entrada = gsap.timeline({ paused: true });
+            const scrollTrigger = {
+                trigger: momento,
+                start: ARRANQUE,
+                toggleActions: ACCIONES,
+            };
 
             // Quien pidió menos movimiento recibe el mismo orden, pero sólo
             // como aparición: nada se desplaza ni rebota.
             if (menosMovimiento()) {
-                entrada.fromTo(
+                gsap.fromTo(
                     piezas,
                     { opacity: 0 },
                     {
@@ -179,31 +162,14 @@ const momentos = [
                         duration: 0.45,
                         stagger: 0.08,
                         ease: "power1.out",
+                        scrollTrigger,
                     },
                 );
-                ScrollTrigger.create({
-                    trigger: momento,
-                    start: ARRANQUE,
-                    onEnter: () => encolar(entrada),
-                });
                 return;
             }
 
             const desde = momento.dataset.lado === "der" ? 1 : -1;
-
-            if (marcas.length > 0) {
-                entrada.fromTo(
-                    marcas,
-                    { opacity: 0, filter: "blur(4px)" },
-                    {
-                        opacity: 1,
-                        filter: "blur(0px)",
-                        duration: 0.8,
-                        ease: "sine.out",
-                    },
-                    0,
-                );
-            }
+            const entrada = gsap.timeline({ scrollTrigger });
 
             if (icono) {
                 entrada.fromTo(
@@ -269,12 +235,6 @@ const momentos = [
                     0.5,
                 );
             }
-
-            ScrollTrigger.create({
-                trigger: momento,
-                start: ARRANQUE,
-                onEnter: () => encolar(entrada),
-            });
         });
     });
 </script>

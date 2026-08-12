@@ -54,14 +54,14 @@ const parrafos = [
 
 const despedida = "TE ESPERAMOS";
 
-// ⚠️ CAMBIAR por el WhatsApp real de los novios (código de país + número, sin +)
-const whatsapp = "59100000000";
-// El mensaje sale armado con la cantidad de pases, así los novios saben
-// cuántos vienen sin tener que preguntar.
+// WhatsApp de los novios (código de país + número, sin + ni espacios).
+const whatsapp = "59161006490";
+// El mensaje solo cambia de singular a plural según los pases; no menciona
+// la cantidad de personas ni la hora.
 const mensaje =
     pases === 1
         ? "Me complace confirmar mi asistencia a la boda de Stephanie y Jorge. Nos vemos el sábado 29 de agosto. ¡Estaré sin falta!"
-        : `Nos complace confirmar nuestra asistencia a la boda de Stephanie y Jorge: asistiremos ${pasesEnLetras} personas. Nos vemos el sábado 29 de agosto. ¡Allí estaremos!`;
+        : "Nos complace confirmar nuestra asistencia a la boda de Stephanie y Jorge. Nos vemos el sábado 29 de agosto. ¡Allí estaremos!";
 
 const enlace = `https://wa.me/${whatsapp}?text=${encodeURIComponent(mensaje)}`;
 
