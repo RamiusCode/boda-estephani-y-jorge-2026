@@ -34,7 +34,7 @@ const momentos = [
 </section>
 
 <section class="w-full px-6 py-14">
-    <div class="relative max-w-[330px] mx-auto">
+    <div id="linea-tiempo" class="relative max-w-[330px] mx-auto">
         <!-- Línea central: sólida y en vino, como en el diseño -->
         <div class="absolute left-1/2 top-3 bottom-3 w-px -translate-x-1/2 bg-vino"></div>
 
@@ -125,18 +125,75 @@ const momentos = [
     */
     const enEspera = new Set<gsap.core.Timeline>();
 
+    // Todas las timelines del cronograma, para poder devolverlas juntas al
+    // principio cuando el invitado sube por encima de la sección.
+    const entradas: gsap.core.Timeline[] = [];
+
+    /*
+       Número de pasada. Cambiar la variable `cola` no alcanza para cancelar
+       los turnos que ya estaban encadenados: esos .then() siguen existiendo
+       y, cuando les toca, igual reproducen su momento. Por eso cada turno se
+       lleva anotada la pasada en la que se pidió y se descarta si ya no es
+       la vigente. Sin esto, después de subir y bajar quedaban dos secuencias
+       corriendo a la vez —la nueva desde el primer momento y la vieja
+       terminando los de abajo— y se veían momentos ya armados mientras
+       arriba recién empezaba.
+    */
+    let pasada = 0;
+
     function encolar(entrada: gsap.core.Timeline) {
         if (enEspera.has(entrada)) return;
         enEspera.add(entrada);
 
+        const suPasada = pasada;
+
         cola = cola.then(
             () =>
                 new Promise<void>((libre) => {
+                    if (suPasada !== pasada) {
+                        libre();
+                        return;
+                    }
+
                     enEspera.delete(entrada);
                     entrada.restart();
                     gsap.delayedCall(entrada.duration() * RELEVO, libre);
                 }),
         );
+    }
+
+    /*
+       Reset de toda la sección, no de a un momento.
+
+       Antes cada momento se reseteaba solo al salir por arriba, y ahí estaba
+       el problema: si el invitado frenaba a mitad del cronograma y subía,
+       los de arriba volvían a cero pero los de abajo —que nunca salieron de
+       pantalla— se quedaban a medio animar. Al bajar de nuevo arrancaban dos
+       secuencias desfasadas: una desde el primero y otra desde donde había
+       quedado.
+
+       Ahora se vacía la cola y vuelven todos a cero de una sola vez, así la
+       línea siempre se rearma entera y en orden.
+    */
+    function reiniciarCronograma() {
+        // Primero se invalida la pasada: cualquier turno que todavía estaba
+        // en la cadena vieja se va a descartar solo al llegarle el momento.
+        pasada += 1;
+        enEspera.clear();
+        cola = Promise.resolve();
+        entradas.forEach((entrada) => entrada.pause(0));
+    }
+
+    /*
+       Un momento se anota una sola vez por pasada. Si ya corrió —o está
+       corriendo— vuelve a entrar en pantalla sin animarse: sólo se rehace
+       después de un reiniciarCronograma(), que es el que lo devuelve a cero.
+       Sin esto, subir un poco y volver a bajar repetía momentos sueltos y
+       era justamente lo que descolocaba la secuencia.
+    */
+    function anotar(entrada: gsap.core.Timeline) {
+        if (entrada.progress() > 0) return;
+        encolar(entrada);
     }
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -145,8 +202,8 @@ const momentos = [
 
         /*
            Cada momento tiene su propio trigger, pero la animación no corre
-           ahí: se encola. Así entran estrictamente uno por uno y en orden,
-           cada uno arrancando recién cuando el anterior terminó.
+           ahí: se encola. Así entran siempre en orden y encabalgados a la
+           cuarta parte del anterior, nunca todos juntos.
 
            Dentro de cada momento las piezas entran encadenadas y cada una
            con su propio gesto, para que la línea de tiempo se arme sola
@@ -193,11 +250,11 @@ const momentos = [
                         ease: "power1.out",
                     },
                 );
+                entradas.push(entrada);
                 ScrollTrigger.create({
                     trigger: momento,
                     start: ARRANQUE,
-                    onEnter: () => encolar(entrada),
-                    onLeaveBack: () => entrada.pause(0),
+                    onEnter: () => anotar(entrada),
                 });
                 return;
             }
@@ -285,18 +342,28 @@ const momentos = [
                 );
             }
 
-            /*
-               Al salir por arriba el momento vuelve a cero, escondido: así
-               cada vez que el invitado baja sobre el cronograma la línea se
-               rearma entera de nuevo. Al volver desde abajo se deja como
-               está, para no interrumpir a quien está subiendo.
-            */
+            entradas.push(entrada);
             ScrollTrigger.create({
                 trigger: momento,
                 start: ARRANQUE,
-                onEnter: () => encolar(entrada),
-                onLeaveBack: () => entrada.pause(0),
+                onEnter: () => anotar(entrada),
             });
         });
+
+        /*
+           El reset vive acá, en la sección entera, y no en cada momento: al
+           subir por encima del cronograma vuelven todos a cero juntos, así
+           la próxima bajada rearma la línea completa desde el primero. Al
+           volver desde abajo no se toca nada, para no interrumpir a quien
+           está subiendo.
+        */
+        const lineaTiempo = document.getElementById("linea-tiempo");
+        if (lineaTiempo) {
+            ScrollTrigger.create({
+                trigger: lineaTiempo,
+                start: ARRANQUE,
+                onLeaveBack: reiniciarCronograma,
+            });
+        }
     });
 </script>
