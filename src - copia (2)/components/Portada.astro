@@ -2,29 +2,6 @@
 // src/components/Portada.astro - Portada en dos pasos:
 //   1. arco vino con los nombres + botón de ingreso (arranca la música)
 //   2. el sobre: se toca para abrir la invitación
-// El nombre del invitado llega desde la página: las personalizadas
-// (/[slug]) lo pasan tal cual está escrito en lista.txt, y la genérica (/)
-// no lo pasa, así que esa línea directamente no se dibuja.
-interface Props {
-    invitado?: string;
-}
-
-const { invitado } = Astro.props;
-
-/*
-   Los nombres de la lista van de 20 a 45 caracteres ("Señorita Paola
-   Aranibar Rodrigo y acompañante" contra "Señor Raul Via"). Con un solo
-   cuerpo, los largos se comían tres renglones y empujaban el botón de
-   ingreso fuera de la pantalla. Así el cuerpo baja por tramos y el nombre
-   entra en uno o dos renglones en todos los casos.
-*/
-const cuerpoInvitado =
-    !invitado || invitado.length <= 28
-        ? "text-[clamp(0.85rem,4vw,1.05rem)]"
-        : invitado.length <= 38
-          ? "text-[clamp(0.75rem,3.5vw,0.94rem)]"
-          : "text-[clamp(0.68rem,3.1vw,0.84rem)]";
-
 // ── DATOS EDITABLES ───────────────────────────────────────────
 const anuncio = "¡ NOS CASAMOS !";
 const monograma = "SJ";
@@ -32,6 +9,7 @@ const monograma = "SJ";
 // el ampersand se confunde con las letras de al lado y no se lee.
 const novia = "Stephanie";
 const novio = "Jorge";
+const invitado = "Señor: Sebastian Rocabado";
 const textoBoton = "Ingresar a la Invitación";
 const textoSobre = "Toca el sobre para abrir la invitación";
 // ──────────────────────────────────────────────────────────────
@@ -125,21 +103,10 @@ const textoSobre = "Toca el sobre para abrir la invitación";
                 >{novio}
             </h1>
 
-            {/*
-               Sin nombre va el mismo párrafo pero con un espacio duro. Así
-               el arco conserva exactamente el hueco que ocupa el nombre en
-               las invitaciones personalizadas: si no, en la general el arco
-               cerraba pegado a "Stephanie & Jorge" y se veía apretado.
-
-               Comparte las clases con la versión con nombre a propósito —
-               mismo margen y mismo interlineado— para que la altura salga
-               igual en cualquier ancho de pantalla sin números a mano.
-            */}
             <p
-                class={`font-callingstone text-crema/95 tracking-wide leading-[1.6] mt-14 ${cuerpoInvitado}`}
-                aria-hidden={invitado ? undefined : "true"}
+                class="font-callingstone text-crema/95 text-[clamp(0.85rem,4vw,1.05rem)] tracking-wide mt-14"
             >
-                {invitado ?? " "}
+                {invitado}
             </p>
         </div>
 

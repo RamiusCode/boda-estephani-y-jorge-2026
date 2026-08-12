@@ -1,0 +1,40 @@
+﻿---
+// src/components/Versiculo.astro
+// Banda vino con el versículo bíblico.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const versiculo = [
+    "ASÍ QUE NO SON YA MÁS DOS, SINO UNA SOLA",
+    "CARNE; POR TANTO, LO QUE DIOS HA UNIDO,",
+    "NO LO SEPARE EL HOMBRE.",
+];
+const cita = "Mateo 19:6";
+// ──────────────────────────────────────────────────────────────
+---
+
+<section
+    id="versiculo"
+    class="franja relative w-full py-10 px-4 overflow-hidden"
+>
+    <div class="franja-fondo absolute inset-0 bg-vino"></div>
+
+    <p
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.6rem,3.05vw,0.83rem)] tracking-[0.05em] leading-[2.4]"
+    >
+        {versiculo.map((linea) => <span class="block whitespace-nowrap">{linea}</span>)}
+    </p>
+
+    <p
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.8rem,3.6vw,1rem)] tracking-[0.08em] mt-6"
+    >
+        {cita}
+    </p>
+</section>
+
+<script>
+    import { animarFranja } from "../scripts/animaciones";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const seccion = document.getElementById("versiculo");
+        if (seccion) animarFranja(seccion);
+    });
+</script>

@@ -2,20 +2,30 @@
 // src/components/Confirmar.astro
 // Banda "Querida familia y amigos" + pases reservados + confirmación por WhatsApp.
 
-// Cantidad de pases del invitado, tal como figura en lista.txt. Lo pasa la
-// página personalizada (/[slug]); la genérica (/) no lo manda, y entonces
-// la etiqueta de pases no se dibuja.
+// Cantidad de pases del invitado. Se pasa desde index.astro:
+//     <Confirmar pases={2} />
+// Así cada invitado puede tener su propia invitación con su número de pases.
 interface Props {
     pases?: number;
 }
 
-const { pases } = Astro.props;
+const { pases = 1 } = Astro.props;
 
-const etiquetaPases = !pases
-    ? null
-    : pases === 1
-      ? "PASE PARA 1 PERSONA"
-      : `PASE PARA ${pases} PERSONAS`;
+const enLetras = [
+    "",
+    "un",
+    "dos",
+    "tres",
+    "cuatro",
+    "cinco",
+    "seis",
+    "siete",
+    "ocho",
+];
+const pasesEnLetras = enLetras[pases] ?? String(pases);
+
+const etiquetaPases =
+    pases === 1 ? "PASE PARA 1 PERSONA" : `PASE PARA ${pases} PERSONAS`;
 
 // ── DATOS EDITABLES ───────────────────────────────────────────
 const titulo = "QUERIDA FAMILIA Y AMIGOS";
@@ -102,13 +112,11 @@ const textoBoton = "CONFIRMAR ASISTENCIA";
     </a>
 
     <!-- Pases reservados para este invitado -->
-    {
-        etiquetaPases && (
-            <p class="inline-block mt-4 px-4 py-2.5 rounded-md bg-marron text-crema font-callingstone text-[clamp(0.5rem,2.3vw,0.62rem)] tracking-[0.12em] whitespace-nowrap">
-                {etiquetaPases}
-            </p>
-        )
-    }
+    <p
+        class="inline-block mt-4 px-4 py-2.5 rounded-md bg-marron text-crema font-callingstone text-[clamp(0.5rem,2.3vw,0.62rem)] tracking-[0.12em] whitespace-nowrap"
+    >
+        {etiquetaPases}
+    </p>
 
     <p
         class="font-balham text-marron text-[clamp(0.9rem,4.8vw,1.3rem)] leading-[1.5] mt-12"

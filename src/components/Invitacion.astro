@@ -1,0 +1,51 @@
+---
+// src/components/Invitacion.astro
+// El cuerpo completo de la invitación, en un solo lugar.
+//
+// Lo usan las dos páginas —la genérica (index.astro) y la personalizada
+// ([slug].astro)— para que no existan dos copias que se vayan
+// desincronizando a medida que se retoca el diseño.
+//
+// Sin `invitado` no se dibuja el nombre en la portada; sin `pases` no se
+// dibuja la etiqueta de pases al pie. Así la misma pieza sirve para la
+// versión general y para las 61 personalizadas.
+import Portada from "./Portada.astro";
+import Versiculo from "./Versiculo.astro";
+import NombresPadres from "./NombresPadres.astro";
+import Fecha from "./Fecha.astro";
+import Contador from "./Contador.astro";
+import CeremoniaCivil from "./CeremoniaCivil.astro";
+import Cronograma from "./Cronograma.astro";
+import CodigoVestimenta from "./CodigoVestimenta.astro";
+import Historia from "./Historia.astro";
+import Confirmar from "./Confirmar.astro";
+import Despedida from "./Despedida.astro";
+import BotonMusica from "./BotonMusica.astro";
+
+interface Props {
+    invitado?: string;
+    pases?: number;
+}
+
+const { invitado, pases } = Astro.props;
+---
+
+<!-- PORTADA (cubre todo hasta que se toca el sobre) -->
+<Portada invitado={invitado} />
+
+<!-- CONTENIDO DE LA INVITACIÓN -->
+<div id="contenido-principal">
+    <Versiculo />
+    <NombresPadres />
+    <Fecha />
+    <Contador />
+    <CeremoniaCivil />
+    <Cronograma />
+    <CodigoVestimenta />
+    <Historia />
+    <Confirmar pases={pases} />
+    <Despedida />
+</div>
+
+<!-- Control de música flotante -->
+<BotonMusica />

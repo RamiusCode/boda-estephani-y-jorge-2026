@@ -1,0 +1,124 @@
+﻿---
+// src/components/Calendario.astro
+// Banda "Calendario" + arco vino con el mes de la boda y el día marcado.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const monograma = "SJ";
+const mes = "Agosto";
+const anio = 2026;
+const mesIndice = 7; // 0 = enero ... 7 = agosto
+const diaBoda = 29;
+// ──────────────────────────────────────────────────────────────
+
+const cabeceras = ["D", "L", "M", "M", "J", "V", "S"];
+
+// Arma la grilla del mes (semanas de domingo a sábado)
+const primerDia = new Date(anio, mesIndice, 1).getDay();
+const diasDelMes = new Date(anio, mesIndice + 1, 0).getDate();
+
+const celdas: (number | null)[] = [
+    ...Array(primerDia).fill(null),
+    ...Array.from({ length: diasDelMes }, (_, i) => i + 1),
+];
+while (celdas.length % 7 !== 0) celdas.push(null);
+---
+
+<section
+    id="franja-calendario"
+    class="franja relative w-full py-9 px-7 overflow-hidden"
+>
+    <div class="franja-fondo absolute inset-0 bg-vino"></div>
+
+    <h2
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.75rem,3.8vw,1.02rem)] tracking-[0.12em]"
+    >
+        CALENDARIO
+    </h2>
+</section>
+
+<section class="w-full flex justify-center py-20 px-6">
+    <div
+        id="arco-calendario"
+        class="w-full max-w-[320px] bg-vino rounded-t-full shadow-[0_14px_30px_rgba(0,0,0,0.18)] px-6 pt-20 pb-10"
+    >
+        <!-- Monograma como imagen, al 19% del ancho del arco igual que en la portada -->
+        <img
+            src="/imagenes/sj.png"
+            alt={monograma}
+            width="908"
+            height="702"
+            class="w-[61px] h-auto mx-auto"
+        />
+
+        <div class="flex items-center gap-3 mt-6">
+            <!-- Mes y año -->
+            <div class="shrink-0 text-center">
+                <p
+                    class="font-callingstone text-crema text-[1.05rem] tracking-[0.14em]"
+                >
+                    {mes}
+                </p>
+                <p
+                    class="font-callingstone text-crema text-[1.35rem] tracking-[0.08em] flex items-center gap-1 justify-center"
+                >
+                    <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="#6a4925">
+                        <path
+                            d="M12 21s-7.5-4.7-9.3-9A5.3 5.3 0 0 1 12 6.5 5.3 5.3 0 0 1 21.3 12c-1.8 4.3-9.3 9-9.3 9z"
+                        ></path>
+                    </svg>
+                    {anio}
+                </p>
+            </div>
+
+            <div class="w-px self-stretch bg-crema/70"></div>
+
+            <!-- Grilla del mes -->
+            <div class="flex-1">
+                <div
+                    class="grid grid-cols-7 gap-y-[5px] text-center font-balham text-crema"
+                >
+                    {
+                        cabeceras.map((letra) => (
+                            <span class="text-[clamp(0.55rem,2.9vw,0.74rem)] tracking-wide opacity-90 pb-1">
+                                {letra}
+                            </span>
+                        ))
+                    }
+                    {
+                        celdas.map((dia) => (
+                            <span class="relative text-[clamp(0.6rem,3.3vw,0.84rem)] leading-[1.45]">
+                                {dia === diaBoda && (
+                                    <svg
+                                        class="absolute inset-0 m-auto w-[clamp(14px,4.3vw,18px)] h-[clamp(14px,4.3vw,18px)] -translate-y-[1px]"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="#f7f5f6"
+                                        stroke-width="1.6"
+                                    >
+                                        <path d="M12 21s-7.5-4.7-9.3-9A5.3 5.3 0 0 1 12 6.5 5.3 5.3 0 0 1 21.3 12c-1.8 4.3-9.3 9-9.3 9z" />
+                                    </svg>
+                                )}
+                                <span class="relative">{dia ?? ""}</span>
+                            </span>
+                        ))
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    import { animarEntrada, animarFranja } from "../scripts/animaciones";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const franja = document.getElementById("franja-calendario");
+        if (franja) animarFranja(franja);
+
+        const arco = document.getElementById("arco-calendario");
+        if (!arco) return;
+
+        // El arco entra como una sola pieza, con el monograma y la grilla
+        // adentro: es un bloque que se lee de un vistazo.
+        animarEntrada(arco, arco, { y: 22 });
+    });
+</script>

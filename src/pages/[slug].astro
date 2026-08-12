@@ -1,0 +1,24 @@
+---
+// src/pages/[slug].astro
+// Una invitación personalizada por cada renglón de lista.txt.
+//
+// getStaticPaths corre en el build: Astro genera las 61 páginas de una vez
+// y quedan como HTML estático, sin servidor detrás. Agregar o sacar gente
+// de lista.txt alcanza para que aparezcan o desaparezcan invitaciones.
+import Layout from "../layouts/Layout.astro";
+import Invitacion from "../components/Invitacion.astro";
+import { leerInvitados } from "../data/invitados.mjs";
+
+export function getStaticPaths() {
+    return leerInvitados().map(({ slug, nombre, pases }) => ({
+        params: { slug },
+        props: { nombre, pases },
+    }));
+}
+
+const { nombre, pases } = Astro.props;
+---
+
+<Layout title="Stephanie & Jorge | 29 de Agosto 2026">
+    <Invitacion invitado={nombre} pases={pases} />
+</Layout>

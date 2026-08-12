@@ -1,0 +1,100 @@
+﻿---
+// src/components/Contador.astro
+// Banda "Falta para nuestra boda" + cuenta regresiva en arcos marrones.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const titulo = "FALTA PARA NUESTRA BODA";
+// Fecha y hora de la boda (año, mes-1, día, hora, minuto)
+const fechaBoda = "2026-08-29T12:00:00";
+// ──────────────────────────────────────────────────────────────
+
+const casillas = [
+    { id: "dias", rotulo: "Dias" },
+    { id: "horas", rotulo: "Horas" },
+    { id: "minutos", rotulo: "Minutos" },
+    { id: "segundos", rotulo: "Segundos" },
+];
+---
+
+<section
+    id="franja-contador"
+    class="franja relative w-full py-9 px-7 overflow-hidden"
+>
+    <div class="franja-fondo absolute inset-0 bg-vino"></div>
+
+    <h2
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.75rem,3.8vw,1.02rem)] tracking-[0.1em] whitespace-nowrap"
+    >
+        {titulo}
+    </h2>
+</section>
+
+<!-- Mismo aire arriba y abajo: antes el pie era más grande (pb-24) que la cabeza. -->
+<section
+    id="contador"
+    class="w-full px-6 py-14 flex justify-center"
+    data-fecha={fechaBoda}
+>
+    <div class="flex justify-center gap-2.5 w-full max-w-[360px]">
+        {
+            casillas.map((casilla) => (
+                // min-w-0: sin esto el rótulo más largo ("Segundos") ensancha
+                // su columna y los cuatro arcos dejan de medir igual.
+                <div class="flex-1 min-w-0 flex flex-col items-center">
+                    <div class="w-full aspect-[3/4] bg-marron rounded-t-full flex items-center justify-center">
+                        <span
+                            id={casilla.id}
+                            class="font-adelia text-crema text-[clamp(1.2rem,6.96vw,1.9rem)] leading-none pt-3"
+                        >
+                            00
+                        </span>
+                    </div>
+                    <p class="font-callingstone text-marron text-[clamp(0.72rem,3.6vw,1rem)] mt-2.5 whitespace-nowrap">
+                        {casilla.rotulo}
+                    </p>
+                </div>
+            ))
+        }
+    </div>
+</section>
+
+<script>
+    import { animarEntrada, animarFranja } from "../scripts/animaciones";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const franja = document.getElementById("franja-contador");
+        if (franja) animarFranja(franja);
+
+        const seccion = document.getElementById("contador");
+        if (!seccion) return;
+
+        // Los cuatro arcos de la cuenta regresiva.
+        animarEntrada(seccion.querySelectorAll<HTMLElement>(":scope > div > div"), seccion);
+
+        const objetivo = new Date(seccion.dataset.fecha as string).getTime();
+        const el = (id: string) => document.getElementById(id);
+
+        const pintar = () => {
+            const resta = Math.max(objetivo - Date.now(), 0);
+            const seg = Math.floor(resta / 1000);
+
+            const dias = Math.floor(seg / 86400);
+            const horas = Math.floor((seg % 86400) / 3600);
+            const minutos = Math.floor((seg % 3600) / 60);
+            const segundos = seg % 60;
+
+            const dosDigitos = (n: number) => n.toString().padStart(2, "0");
+
+            const d = el("dias");
+            const h = el("horas");
+            const m = el("minutos");
+            const s = el("segundos");
+            if (d) d.textContent = dias.toString();
+            if (h) h.textContent = dosDigitos(horas);
+            if (m) m.textContent = dosDigitos(minutos);
+            if (s) s.textContent = dosDigitos(segundos);
+        };
+
+        pintar();
+        setInterval(pintar, 1000);
+    });
+</script>

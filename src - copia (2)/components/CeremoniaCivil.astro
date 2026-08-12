@@ -1,0 +1,102 @@
+﻿---
+// src/components/CeremoniaCivil.astro
+// Banda "Ceremonia civil" + invitación, dirección y botón de ubicación.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const titulo = "CEREMONIA CIVIL";
+
+// Renglones cortos a propósito: con líneas de ~50 caracteres el texto no
+// podía pasar de 17px sin desbordar. Partidas así, entran mucho más grandes.
+const parrafos = [
+    [
+        "Nos complace invitarles a compartir",
+        "la ceremonia civil donde uniremos",
+        "nuestras vidas en matrimonio.",
+    ],
+    [
+        "Al finalizar, celebraremos con una",
+        "recepción en el mismo lugar.",
+    ],
+];
+
+// El salón va resaltado y la dirección más chica: es la línea más larga
+// de la sección y es la que marca el techo del tamaño de todo el bloque.
+// Las comillas van en el dato porque el nombre ocupa dos renglones: abre en
+// el primero y cierra en el segundo.
+const salon = ["“Salón Solárium", "Automóvil Club Boliviano”"];
+const direccion = ["Av. Ballivián,", "Calle 13 de Calacoto"];
+
+// ⚠️ Reemplazar por el enlace exacto de Google Maps del salón
+const mapa =
+    "https://www.google.com/maps/search/?api=1&query=Av.+Balliv%C3%A1n+Calle+13+Calacoto+La+Paz";
+// ──────────────────────────────────────────────────────────────
+---
+
+<section
+    id="franja-ceremonia"
+    class="franja relative w-full py-8 px-7 overflow-hidden"
+>
+    <div class="franja-fondo absolute inset-0 bg-vino"></div>
+
+    <h2
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.75rem,3.8vw,1.02rem)] tracking-[0.12em]"
+    >
+        {titulo}
+    </h2>
+</section>
+
+<section id="ceremonia-civil" class="w-full px-4 py-14 text-center">
+    <span
+        class="icono icono-marron w-[88px] h-[88px] mx-auto"
+        style="--ic: url('/imagenes/ceremoniacivil.png')"
+        aria-hidden="true"></span>
+
+    <div class="mt-4 space-y-3">
+        {
+            parrafos.map((parrafo) => (
+                <p class="font-balham text-marron text-[clamp(0.9rem,4.8vw,1.3rem)] leading-[1.45]">
+                    {parrafo.map((linea) => (
+                        <span class="block whitespace-nowrap">{linea}</span>
+                    ))}
+                </p>
+            ))
+        }
+
+        <div class="pt-1">
+            <p
+                class="font-callingstone text-marron text-[clamp(0.78rem,3.95vw,1.06rem)] tracking-[0.06em] leading-[2.1]"
+            >
+                {salon.map((linea) => (
+                    <span class="block whitespace-nowrap">{linea}</span>
+                ))}
+            </p>
+            <p
+                class="font-balham text-marron text-[clamp(0.9rem,4.8vw,1.3rem)] leading-[1.45] mt-2"
+            >
+                {direccion.map((linea) => (
+                    <span class="block whitespace-nowrap">{linea}</span>
+                ))}
+            </p>
+        </div>
+    </div>
+
+    <a
+        href={mapa}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="block w-full max-w-[185px] mx-auto mt-6 px-6 py-3.5 rounded-[10px] bg-marron text-crema font-callingstone text-[clamp(0.7rem,3.1vw,0.84rem)] tracking-[0.18em] whitespace-nowrap shadow-[0_4px_12px_rgba(0,0,0,0.14)] transition-transform hover:scale-[1.04]"
+    >
+        UBICACIÓN
+    </a>
+</section>
+
+<script>
+    import { animarEntrada, animarFranja } from "../scripts/animaciones";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const franja = document.getElementById("franja-ceremonia");
+        if (franja) animarFranja(franja);
+
+        const seccion = document.getElementById("ceremonia-civil");
+        if (seccion) animarEntrada(seccion.children, seccion);
+    });
+</script>

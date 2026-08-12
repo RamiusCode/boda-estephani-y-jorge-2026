@@ -1,0 +1,397 @@
+---
+// src/components/Historia.astro
+// Banda "Nuestra Historia" + llamado con botón que abre la historia en un modal.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const titulo = "NUESTRA HISTORIA";
+
+const pregunta = "¿Quieres saber cómo empezó todo?";
+const invitacion = ["Toca el botón y descubre", "nuestra historia de amor"];
+const textoBoton = "LEER NUESTRA HISTORIA";
+
+const parrafos = [
+    "Hay historias que comienzan en el momento menos esperado… y otras que, sin saberlo, empiezan mucho antes.",
+    "La nuestra comenzó hace tiempo, cuando el destino cruzó nuestros caminos por primera vez. Sin embargo, fue hace un año cuando decidimos mirarnos de nuevo, abrir el corazón y darnos una verdadera oportunidad.",
+    "Desde entonces, descubrimos que el amor también se construye con paciencia, complicidad, respeto y la decisión de caminar de la mano, incluso en los días más inciertos. Cada paso nos confirmó que aquella oportunidad era, en realidad, el inicio de la historia que siempre estuvo destinada para nosotros.",
+    "Hoy, nuestro camino está lleno de ilusión, sueños compartidos y una hermosa claridad que ilumina cada uno de nuestros días y nos recuerda que las mejores decisiones nacen del amor.",
+    "Con inmensa felicidad, queremos invitarlos a ser testigos del momento en que uniremos nuestras vidas para siempre, celebrando junto a quienes más queremos el comienzo de este nuevo capítulo.",
+];
+// ──────────────────────────────────────────────────────────────
+---
+
+<section
+    id="franja-historia"
+    class="franja relative w-full py-8 px-7 overflow-hidden"
+>
+    <div class="franja-fondo absolute inset-0 bg-vino"></div>
+
+    <h2
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.75rem,3.8vw,1.02rem)] tracking-[0.12em]"
+    >
+        {titulo}
+    </h2>
+</section>
+
+<section id="historia" class="w-full px-6 py-14 text-center">
+    <p
+        class="font-adelia text-vino text-[clamp(0.86rem,4.3vw,1.16rem)] leading-[1.6] whitespace-nowrap"
+    >
+        {pregunta}
+    </p>
+
+    <p
+        class="font-balham text-marron text-[clamp(0.9rem,4.8vw,1.3rem)] leading-[1.6] mt-4"
+    >
+        {invitacion.map((linea) => <span class="block">{linea}</span>)}
+    </p>
+
+    <!-- Corazón y flecha, como en la referencia -->
+    <svg
+        class="w-[22px] h-[22px] mx-auto mt-5"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+        style="color: #861622"
+    >
+        <path
+            d="M12 21s-7.5-4.7-9.3-9A5.3 5.3 0 0 1 12 6.5 5.3 5.3 0 0 1 21.3 12c-1.8 4.3-9.3 9-9.3 9z"
+        ></path>
+    </svg>
+
+    <!-- Tres flechas que se encienden en cadena señalando el botón -->
+    <div class="flechas mt-2 flex flex-col items-center" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M6 9l6 6 6-6"></path>
+        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M6 9l6 6 6-6"></path>
+        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M6 9l6 6 6-6"></path>
+        </svg>
+    </div>
+
+    <button
+        id="abrir-historia"
+        type="button"
+        class="flex w-full max-w-[285px] mx-auto items-center justify-center gap-2 mt-5 px-6 py-3.5 rounded-[10px] bg-vino text-crema font-callingstone text-[clamp(0.7rem,3.1vw,0.84rem)] tracking-[0.18em] whitespace-nowrap cursor-pointer shadow-[0_4px_12px_rgba(0,0,0,0.14)] transition-transform hover:scale-[1.04]"
+    >
+        <svg
+            class="w-[13px] h-[13px] shrink-0"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+        >
+            <path
+                d="M12 21s-7.5-4.7-9.3-9A5.3 5.3 0 0 1 12 6.5 5.3 5.3 0 0 1 21.3 12c-1.8 4.3-9.3 9-9.3 9z"
+            ></path>
+        </svg>
+        {textoBoton}
+    </button>
+</section>
+
+<!-- ── MODAL CON LA HISTORIA ────────────────────────────────── -->
+<div
+    id="modal-historia"
+    class="fixed inset-0 z-[9500] hidden items-center justify-center px-5 py-8"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-historia-titulo"
+>
+    <div id="modal-fondo" class="absolute inset-0 bg-black/55"></div>
+
+    <!--
+       El panel no scrollea: scrollea el div de adentro. Así la X queda
+       anclada arriba a la derecha y no se va con el texto.
+    -->
+    <div
+        id="modal-panel"
+        class="relative flex flex-col w-full max-w-[390px] max-h-full overflow-hidden rounded-2xl bg-papel shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
+    >
+        <button
+            id="cerrar-historia"
+            type="button"
+            aria-label="Cerrar la historia"
+            class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full flex items-center justify-center bg-papel/85 backdrop-blur-sm text-vino cursor-pointer transition-transform hover:scale-110"
+        >
+            <svg
+                class="w-[18px] h-[18px]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+            >
+                <path d="M6 6l12 12M18 6L6 18"></path>
+            </svg>
+        </button>
+
+        <!--
+           overscroll-contain corta el encadenado: al llegar al tope o al
+           fondo de la historia, lo que sobra del gesto se queda acá y no
+           pasa a mover la invitación de atrás.
+        -->
+        <div
+            id="modal-scroll"
+            class="flex-1 min-h-0 overflow-y-auto overscroll-contain px-7 pt-10 pb-9"
+        >
+            <h3
+                id="modal-historia-titulo"
+                class="font-callingstone text-vino text-center text-[clamp(0.8rem,3.8vw,1.05rem)] tracking-[0.16em]"
+            >
+                {titulo}
+            </h3>
+
+            <div class="mt-6 space-y-4">
+                {
+                    parrafos.map((parrafo) => (
+                        <p class="historia-parrafo font-balham text-marron text-[clamp(0.92rem,4.4vw,1.18rem)] leading-[1.7] text-center">
+                            {parrafo}
+                        </p>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /*
+       Tres flechas y nada más: apenas solapadas para que se lean como tres
+       y no como una mancha, y cada una se enciende con un retardo distinto,
+       así el ojo baja en cadena hasta el botón.
+    */
+    .flechas svg {
+        width: 20px;
+        height: 20px;
+        color: #861622;
+        stroke-width: 1.7;
+        stroke-linecap: round;
+        opacity: 0.38;
+        margin-top: -5px;
+        animation: bajar-flecha 1.7s ease-in-out infinite;
+    }
+
+    .flechas svg:first-child {
+        margin-top: 0;
+    }
+    .flechas svg:nth-child(2) {
+        animation-delay: 0.22s;
+    }
+    .flechas svg:nth-child(3) {
+        animation-delay: 0.44s;
+    }
+
+    @keyframes bajar-flecha {
+        0%,
+        70%,
+        100% {
+            opacity: 0.38;
+            transform: translateY(0);
+        }
+        35% {
+            opacity: 1;
+            transform: translateY(3px);
+        }
+    }
+
+    /* Para quien pidió menos movimiento, quedan quietas y visibles */
+    @media (prefers-reduced-motion: reduce) {
+        .flechas svg {
+            animation: none;
+            opacity: 0.55;
+        }
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+    import { animarEntrada, animarFranja } from "../scripts/animaciones";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const franja = document.getElementById("franja-historia");
+        if (franja) animarFranja(franja);
+
+        const seccion = document.getElementById("historia");
+        if (seccion) animarEntrada(seccion.children, seccion);
+
+        const modal = document.getElementById("modal-historia");
+        const panel = document.getElementById("modal-panel");
+        const cuerpo = document.getElementById("modal-scroll");
+        const fondo = document.getElementById("modal-fondo");
+        const abrir = document.getElementById("abrir-historia");
+        const cerrar = document.getElementById("cerrar-historia");
+        const titulo = document.getElementById("modal-historia-titulo");
+        const parrafos =
+            document.querySelectorAll<HTMLElement>(".historia-parrafo");
+        if (!modal || !panel || !abrir) return;
+
+        const menosMovimiento = () =>
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        /*
+           Bloqueo del fondo mientras el modal está abierto.
+
+           Va en <html> además de en <body>: el que scrollea es <html> —es
+           donde el Layout declara el overflow—, así que tocar sólo <body>
+           no lo frenaba y la invitación de atrás se seguía moviendo.
+        */
+        const bloquearFondo = () => {
+            document.documentElement.style.overflow = "hidden";
+            document.body.style.overflow = "hidden";
+            modal.addEventListener("touchmove", frenarGestoFuera, {
+                passive: false,
+            });
+        };
+
+        const liberarFondo = () => {
+            document.documentElement.style.overflow = "";
+            document.body.style.overflow = "";
+            modal.removeEventListener("touchmove", frenarGestoFuera);
+        };
+
+        /*
+           Safari en iOS ignora el overflow:hidden para el gesto táctil, así
+           que el dedo sobre el velo o los bordes del panel igual arrastra la
+           página. Se corta cancelando el gesto salvo cuando nace dentro de
+           la historia, que es lo único que tiene que poder scrollear.
+        */
+        function frenarGestoFuera(e: TouchEvent) {
+            if (cuerpo?.contains(e.target as Node)) return;
+            e.preventDefault();
+        }
+
+        // La apertura se rehace en cada click, no se guarda: así el invitado
+        // ve la historia armarse de nuevo cada vez que abre el modal.
+        let apertura: gsap.core.Timeline | null = null;
+
+        /*
+           El modal no aparece de golpe: primero se oscurece el fondo, el
+           panel sube y sale de foco, y recién ahí el título abre las letras
+           y los párrafos caen uno atrás del otro. Ese escalonado es lo que
+           hace que se sienta un sobre abriéndose y no una ventana.
+
+           Todo el gesto son ~1,2s, pero el panel ya está entero a los 0,7s:
+           quien quiera leer ya de entrada no espera a que termine.
+        */
+        const abrirModal = () => {
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+            bloquearFondo();
+            if (cuerpo) cuerpo.scrollTop = 0;
+
+            apertura?.kill();
+
+            if (menosMovimiento()) {
+                apertura = gsap.timeline();
+                apertura.fromTo(
+                    [fondo, panel],
+                    { opacity: 0 },
+                    { opacity: 1, duration: 0.35, ease: "power1.out" },
+                );
+                // Sin escalonado, título y párrafos tienen que quedar
+                // visibles sí o sí: se limpia lo que haya dejado una
+                // apertura anterior.
+                const contenido = [titulo, ...parrafos].filter(
+                    (pieza): pieza is HTMLElement => pieza !== null,
+                );
+                if (contenido.length > 0) {
+                    gsap.set(contenido, { clearProps: "all" });
+                }
+                return;
+            }
+
+            apertura = gsap.timeline();
+
+            apertura.fromTo(
+                fondo,
+                { opacity: 0 },
+                { opacity: 1, duration: 0.5, ease: "sine.out" },
+                0,
+            );
+
+            apertura.fromTo(
+                panel,
+                { opacity: 0, y: 40, scale: 0.92, filter: "blur(8px)" },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    filter: "blur(0px)",
+                    duration: 0.75,
+                    // Rebote apenas insinuado, igual que los iconos del
+                    // cronograma: el panel se asienta, no golpea.
+                    ease: "back.out(1.2)",
+                },
+                0,
+            );
+
+            if (titulo) {
+                // Las letras arrancan muy abiertas y se cierran hasta su
+                // interletrado real: el título termina de "posarse".
+                apertura.fromTo(
+                    titulo,
+                    { opacity: 0, y: 10, letterSpacing: "0.5em" },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        letterSpacing: "0.16em",
+                        duration: 0.9,
+                        ease: "sine.out",
+                        clearProps: "letterSpacing",
+                    },
+                    0.3,
+                );
+            }
+
+            if (parrafos.length > 0) {
+                apertura.fromTo(
+                    parrafos,
+                    { opacity: 0, y: 18, filter: "blur(4px)" },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        filter: "blur(0px)",
+                        duration: 0.7,
+                        stagger: 0.11,
+                        ease: "sine.out",
+                    },
+                    0.45,
+                );
+            }
+        };
+
+        const cerrarModal = () => {
+            apertura?.kill();
+
+            gsap.to(panel, {
+                opacity: 0,
+                y: 22,
+                scale: 0.96,
+                filter: "blur(6px)",
+                duration: 0.3,
+                ease: "power2.in",
+            });
+            gsap.to(fondo, {
+                opacity: 0,
+                duration: 0.3,
+                onComplete: () => {
+                    modal.classList.add("hidden");
+                    modal.classList.remove("flex");
+                    liberarFondo();
+                    // El panel queda limpio para que la próxima apertura
+                    // arranque de cero y no herede el blur del cierre.
+                    gsap.set(panel, { clearProps: "all" });
+                },
+            });
+        };
+
+        abrir.addEventListener("click", abrirModal);
+        cerrar?.addEventListener("click", cerrarModal);
+        fondo?.addEventListener("click", cerrarModal);
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+                cerrarModal();
+            }
+        });
+    });
+</script>

@@ -1,0 +1,54 @@
+---
+// src/components/Despedida.astro
+// Arco final a todo el ancho con el monograma, los nombres y el lugar.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const monograma = "SJ";
+// Los nombres van separados porque el "&" lleva su propia fuente: en Adelia
+// el ampersand se confunde con las letras de al lado y no se lee.
+const novia = "Stephanie";
+const novio = "Jorge";
+const lugar = "La Paz - Bolivia";
+// ──────────────────────────────────────────────────────────────
+---
+
+<section class="w-full pt-2">
+    <div
+        id="arco-final"
+        class="w-full bg-vino rounded-t-full px-6 pt-[22%] pb-10 text-center"
+    >
+        <img
+            src="/imagenes/sj.png"
+            alt={monograma}
+            width="908"
+            height="702"
+            class="w-[82px] h-auto mx-auto"
+        />
+
+        <h2
+            class="font-adelia text-crema text-[clamp(1.5rem,7vw,1.9rem)] leading-[1.4] mt-10 whitespace-nowrap"
+        >
+            {novia}<span
+                class="font-crimson italic text-[1.25em] mx-[0.16em] align-[-0.02em]"
+                >&amp;</span
+            >{novio}
+        </h2>
+
+        <p
+            class="font-callingstone text-crema text-[1.2rem] tracking-[0.14em] mt-14"
+        >
+            {lugar}
+        </p>
+    </div>
+</section>
+
+<script>
+    import { animarEntrada } from "../scripts/animaciones";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const arco = document.getElementById("arco-final");
+        if (!arco) return;
+
+        // Monograma, nombres y lugar.
+        animarEntrada(arco.children, arco);
+    });
+</script>

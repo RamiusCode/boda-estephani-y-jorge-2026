@@ -1,0 +1,369 @@
+﻿---
+// src/components/Cronograma.astro
+// Banda "Cronograma" + línea de tiempo en zigzag con los momentos del día.
+// ── DATOS EDITABLES ───────────────────────────────────────────
+const titulo = "CRONOGRAMA";
+
+// Los iconos salen de /public/imagenes, donde cada archivo lleva el nombre
+// del momento al que corresponde.
+const momentos = [
+    { nombre: ["CEREMONIA", "CIVIL"], hora: "13:00", icono: "ceremoniacivil.png" },
+    { nombre: ["FOTOS"], hora: "13:30", icono: "fotos.png" },
+    { nombre: ["VALS"], hora: "14:00", icono: "vals.png" },
+    { nombre: ["BRINDIS"], hora: "14:30", icono: "brindis.png" },
+    { nombre: ["BAILE"], hora: "15:00", icono: "party.png" },
+    { nombre: ["CENA"], hora: "16:00", icono: "cena.png" },
+    { nombre: ["TORTA"], hora: "17:00", icono: "torta.png" },
+    { nombre: ["BAILE"], hora: "17:30", icono: "party.png" },
+    { nombre: ["DESPEDIDA", "NOVIOS"], hora: "21:30", icono: "despedida.png" },
+];
+// ──────────────────────────────────────────────────────────────
+---
+
+<section
+    id="franja-cronograma"
+    class="franja relative w-full py-9 px-7 overflow-hidden"
+>
+    <div class="franja-fondo absolute inset-0 bg-vino"></div>
+
+    <h2
+        class="franja-texto relative font-callingstone text-crema text-center text-[clamp(0.75rem,3.8vw,1.02rem)] tracking-[0.12em]"
+    >
+        {titulo}
+    </h2>
+</section>
+
+<section class="w-full px-6 py-14">
+    <div id="linea-tiempo" class="relative max-w-[330px] mx-auto">
+        <!-- Línea central: sólida y en vino, como en el diseño -->
+        <div class="absolute left-1/2 top-3 bottom-3 w-px -translate-x-1/2 bg-vino"></div>
+
+        {
+            momentos.map((momento, i) => (
+                // Cada momento sube 16px (~15% de su alto) sobre el anterior:
+                // como se alternan izquierda y derecha, se encabalgan sin
+                // pisarse y la línea queda mucho más compacta.
+                <div
+                    class={`momento relative grid grid-cols-2 gap-3 ${
+                        i > 0 ? "-mt-4" : ""
+                    }`}
+                    data-lado={i % 2 === 0 ? "der" : "izq"}
+                >
+                    {/*
+                       Tramo horizontal que sale de la línea central hacia el
+                       lado donde está el ítem, a la altura del centro del
+                       icono (la mitad de sus 40px).
+                    */}
+                    <span
+                        class={`momento-marca absolute top-[20px] h-px w-[14px] bg-vino ${
+                            i % 2 === 0 ? "left-1/2" : "right-1/2"
+                        }`}
+                    />
+
+                    {/* Punto sobre la línea central, en el arranque del tramo */}
+                    <span class="momento-marca absolute left-1/2 top-[20px] -translate-x-1/2 -translate-y-1/2 w-[4px] h-[4px] rounded-full bg-vino" />
+
+                    <div
+                        class={`momento-contenido flex flex-col items-center text-center ${
+                            i % 2 === 0 ? "col-start-2" : "col-start-1"
+                        }`}
+                    >
+                        <span
+                            class="momento-icono icono icono-marron w-[40px] h-[40px]"
+                            style={`--ic: url('/imagenes/${momento.icono}')`}
+                            aria-hidden="true"
+                        />
+                        <h3 class="font-callingstone text-vino text-[clamp(0.57rem,2.8vw,0.75rem)] tracking-[0.1em] leading-[1.7] mt-2">
+                            {momento.nombre.map((linea) => (
+                                <span class="momento-nombre block whitespace-nowrap">
+                                    {linea}
+                                </span>
+                            ))}
+                        </h3>
+                        <p class="momento-hora font-balham text-marron text-[clamp(0.66rem,3.1vw,0.83rem)] tracking-wide mt-1">
+                            {momento.hora}
+                        </p>
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { animarFranja } from "../scripts/animaciones";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Mismo arranque que el helper compartido, para que el cronograma entre
+    // con el mismo timing que el resto de la invitación.
+    const ARRANQUE = "top 92%";
+
+    const menosMovimiento = () =>
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /*
+       Cola de reproducción: los momentos entran siempre en orden y nunca
+       arrancan todos juntos. Cada uno, al entrar en pantalla, se anota acá.
+
+       El siguiente no espera a que el anterior termine: larga cuando el
+       anterior va por la cuarta parte. Se solapan bastante, así la línea
+       baja como una sola cosa en vez de ir momento por momento, y la
+       secuencia completa acompaña el scroll del invitado.
+    */
+    const RELEVO = 0.25; // en qué punto del anterior arranca el siguiente
+
+    let cola: Promise<void> = Promise.resolve();
+
+    /*
+       Una timeline no puede estar anotada dos veces. Como la animación se
+       rehace cada vez que se baja sobre el cronograma, sin esto subir y
+       bajar varias veces iría amontonando turnos y la cola quedaría
+       corriendo sola un buen rato después.
+    */
+    const enEspera = new Set<gsap.core.Timeline>();
+
+    // Todas las timelines del cronograma, para poder devolverlas juntas al
+    // principio cuando el invitado sube por encima de la sección.
+    const entradas: gsap.core.Timeline[] = [];
+
+    /*
+       Número de pasada. Cambiar la variable `cola` no alcanza para cancelar
+       los turnos que ya estaban encadenados: esos .then() siguen existiendo
+       y, cuando les toca, igual reproducen su momento. Por eso cada turno se
+       lleva anotada la pasada en la que se pidió y se descarta si ya no es
+       la vigente. Sin esto, después de subir y bajar quedaban dos secuencias
+       corriendo a la vez —la nueva desde el primer momento y la vieja
+       terminando los de abajo— y se veían momentos ya armados mientras
+       arriba recién empezaba.
+    */
+    let pasada = 0;
+
+    function encolar(entrada: gsap.core.Timeline) {
+        if (enEspera.has(entrada)) return;
+        enEspera.add(entrada);
+
+        const suPasada = pasada;
+
+        cola = cola.then(
+            () =>
+                new Promise<void>((libre) => {
+                    if (suPasada !== pasada) {
+                        libre();
+                        return;
+                    }
+
+                    enEspera.delete(entrada);
+                    entrada.restart();
+                    gsap.delayedCall(entrada.duration() * RELEVO, libre);
+                }),
+        );
+    }
+
+    /*
+       Reset de toda la sección, no de a un momento.
+
+       Antes cada momento se reseteaba solo al salir por arriba, y ahí estaba
+       el problema: si el invitado frenaba a mitad del cronograma y subía,
+       los de arriba volvían a cero pero los de abajo —que nunca salieron de
+       pantalla— se quedaban a medio animar. Al bajar de nuevo arrancaban dos
+       secuencias desfasadas: una desde el primero y otra desde donde había
+       quedado.
+
+       Ahora se vacía la cola y vuelven todos a cero de una sola vez, así la
+       línea siempre se rearma entera y en orden.
+    */
+    function reiniciarCronograma() {
+        // Primero se invalida la pasada: cualquier turno que todavía estaba
+        // en la cadena vieja se va a descartar solo al llegarle el momento.
+        pasada += 1;
+        enEspera.clear();
+        cola = Promise.resolve();
+        entradas.forEach((entrada) => entrada.pause(0));
+    }
+
+    /*
+       Un momento se anota una sola vez por pasada. Si ya corrió —o está
+       corriendo— vuelve a entrar en pantalla sin animarse: sólo se rehace
+       después de un reiniciarCronograma(), que es el que lo devuelve a cero.
+       Sin esto, subir un poco y volver a bajar repetía momentos sueltos y
+       era justamente lo que descolocaba la secuencia.
+    */
+    function anotar(entrada: gsap.core.Timeline) {
+        if (entrada.progress() > 0) return;
+        encolar(entrada);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const franja = document.getElementById("franja-cronograma");
+        if (franja) animarFranja(franja);
+
+        /*
+           Cada momento tiene su propio trigger, pero la animación no corre
+           ahí: se encola. Así entran siempre en orden y encabalgados a la
+           cuarta parte del anterior, nunca todos juntos.
+
+           Dentro de cada momento las piezas entran encadenadas y cada una
+           con su propio gesto, para que la línea de tiempo se arme sola
+           delante del invitado en vez de aparecer de golpe:
+
+             · el punto y el tramo abren sobre la línea central,
+             · el icono llega desde su lado y asienta con un rebote mínimo,
+             · el nombre lo sigue renglón por renglón,
+             · la hora cierra soltando las letras desde separadas.
+
+           El encadenado va lento a propósito (~1,7s de punta a punta). El
+           único que rebota es el icono, y apenas: el texto frena parejo con
+           sine.out, que rebotando se lee barato.
+
+           El punto y el tramo no se desplazan: son parte de la línea, sólo
+           aparecen, si no se despegarían del eje.
+        */
+        document.querySelectorAll<HTMLElement>(".momento").forEach((momento) => {
+            const marcas =
+                momento.querySelectorAll<HTMLElement>(".momento-marca");
+            const icono = momento.querySelector<HTMLElement>(".momento-icono");
+            const nombre =
+                momento.querySelectorAll<HTMLElement>(".momento-nombre");
+            const hora = momento.querySelector<HTMLElement>(".momento-hora");
+
+            const piezas = [...marcas, icono, ...nombre, hora].filter(
+                (pieza): pieza is HTMLElement => pieza !== null,
+            );
+            if (piezas.length === 0) return;
+
+            // Arranca pausada: la dispara la cola, no el trigger.
+            const entrada = gsap.timeline({ paused: true });
+
+            // Quien pidió menos movimiento recibe el mismo orden, pero sólo
+            // como aparición: nada se desplaza ni rebota.
+            if (menosMovimiento()) {
+                entrada.fromTo(
+                    piezas,
+                    { opacity: 0 },
+                    {
+                        opacity: 1,
+                        duration: 0.45,
+                        stagger: 0.08,
+                        ease: "power1.out",
+                    },
+                );
+                entradas.push(entrada);
+                ScrollTrigger.create({
+                    trigger: momento,
+                    start: ARRANQUE,
+                    onEnter: () => anotar(entrada),
+                });
+                return;
+            }
+
+            const desde = momento.dataset.lado === "der" ? 1 : -1;
+
+            if (marcas.length > 0) {
+                entrada.fromTo(
+                    marcas,
+                    { opacity: 0, filter: "blur(4px)" },
+                    {
+                        opacity: 1,
+                        filter: "blur(0px)",
+                        duration: 0.9,
+                        ease: "sine.out",
+                    },
+                    0,
+                );
+            }
+
+            if (icono) {
+                entrada.fromTo(
+                    icono,
+                    {
+                        opacity: 0,
+                        x: desde * 28,
+                        scale: 0.82,
+                        filter: "blur(4px)",
+                    },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        scale: 1,
+                        filter: "blur(0px)",
+                        duration: 1.15,
+                        // Rebote apenas insinuado: pasa de largo un pelo y
+                        // vuelve. Antes se sentía brusco porque venía de muy
+                        // lejos (x 44, escala 0.55); con el recorrido corto
+                        // de ahora el mismo gesto queda delicado.
+                        ease: "back.out(1.2)",
+                    },
+                    0,
+                );
+            }
+
+            if (nombre.length > 0) {
+                entrada.fromTo(
+                    nombre,
+                    { opacity: 0, x: desde * 15, filter: "blur(3px)" },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        filter: "blur(0px)",
+                        duration: 0.95,
+                        stagger: 0.16,
+                        ease: "sine.out",
+                    },
+                    0.3,
+                );
+            }
+
+            if (hora) {
+                // Las letras arrancan muy abiertas y se cierran hasta su
+                // interletrado real: el remate elegante de cada momento.
+                entrada.fromTo(
+                    hora,
+                    {
+                        opacity: 0,
+                        y: 4,
+                        letterSpacing: "0.2em",
+                        filter: "blur(3px)",
+                    },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        letterSpacing: "0.025em",
+                        filter: "blur(0px)",
+                        duration: 1.05,
+                        ease: "sine.out",
+                        // El interletrado queda fijado inline por el tween;
+                        // se limpia para que mande de nuevo la clase.
+                        clearProps: "letterSpacing",
+                    },
+                    0.62,
+                );
+            }
+
+            entradas.push(entrada);
+            ScrollTrigger.create({
+                trigger: momento,
+                start: ARRANQUE,
+                onEnter: () => anotar(entrada),
+            });
+        });
+
+        /*
+           El reset vive acá, en la sección entera, y no en cada momento: al
+           subir por encima del cronograma vuelven todos a cero juntos, así
+           la próxima bajada rearma la línea completa desde el primero. Al
+           volver desde abajo no se toca nada, para no interrumpir a quien
+           está subiendo.
+        */
+        const lineaTiempo = document.getElementById("linea-tiempo");
+        if (lineaTiempo) {
+            ScrollTrigger.create({
+                trigger: lineaTiempo,
+                start: ARRANQUE,
+                onLeaveBack: reiniciarCronograma,
+            });
+        }
+    });
+</script>
