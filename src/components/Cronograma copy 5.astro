@@ -153,13 +153,13 @@ const momentos = [
            delante del invitado en vez de aparecer de golpe:
 
              · el punto y el tramo abren sobre la línea central,
-             · el icono llega desde su lado y asienta con un rebote mínimo,
+             · el icono llega desde su lado y frena parejo hasta detenerse,
              · el nombre lo sigue renglón por renglón,
              · la hora cierra soltando las letras desde separadas.
 
-           El encadenado va lento a propósito (~1,7s de punta a punta). El
-           único que rebota es el icono, y apenas: el texto frena parejo con
-           sine.out, que rebotando se lee barato.
+           El encadenado va lento a propósito (~1,7s de punta a punta) y
+           todos los tramos frenan con sine.out, sin rebotes ni tirones:
+           tiene que leerse delicado, no llamativo.
 
            El punto y el tramo no se desplazan: son parte de la línea, sólo
            aparecen, si no se despegarían del eje.
@@ -233,11 +233,10 @@ const momentos = [
                         scale: 1,
                         filter: "blur(0px)",
                         duration: 1.15,
-                        // Rebote apenas insinuado: pasa de largo un pelo y
-                        // vuelve. Antes se sentía brusco porque venía de muy
-                        // lejos (x 44, escala 0.55); con el recorrido corto
-                        // de ahora el mismo gesto queda delicado.
-                        ease: "back.out(1.2)",
+                        // Sin rebote: el back.out pasaba de largo y volvía,
+                        // y ese tirón era lo que se sentía brusco. sine.out
+                        // frena parejo hasta detenerse.
+                        ease: "sine.out",
                     },
                     0,
                 );
