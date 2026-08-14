@@ -6,131 +6,137 @@ Sábado 29 de agosto de 2026
 *** astro.config.mjs como  site: "https://tudominio.com"  y
 *** volver a generar este archivo.
 
-Invitación general (sin nombre ni pases): http://localhost:4325/
+Invitación general (sin nombre ni pases): http://localhost:4322/
 
-62 invitaciones personalizadas:
+65 invitaciones personalizadas:
 
 1. Señora Yovanka Oliden de Loayza - 1 persona(s)
-   http://localhost:4325/yovanka-oliden-de-loayza
+   http://localhost:4322/yovanka-oliden-de-loayza
 2. Señor Jonathan Ruiz Cerdas y familia - 4 persona(s)
-   http://localhost:4325/jonathan-ruiz-cerdas
+   http://localhost:4322/jonathan-ruiz-cerdas
 3. Señor Fraciel Jallaza Choque y Familia - 3 persona(s)
-   http://localhost:4325/fraciel-jallaza-choque
+   http://localhost:4322/fraciel-jallaza-choque
 4. Señora Dioni Choque Mamani y acompañante - 2 persona(s)
-   http://localhost:4325/dioni-choque-mamani
+   http://localhost:4322/dioni-choque-mamani
 5. Señor Manuel Velez Olmos y Familia - 2 persona(s)
-   http://localhost:4325/manuel-velez-olmos
+   http://localhost:4322/manuel-velez-olmos
 6. Señor Ronald Ruiz Roca y esposa - 2 persona(s)
-   http://localhost:4325/ronald-ruiz-roca
+   http://localhost:4322/ronald-ruiz-roca
 7. Señora Ilse Cespedes Rocabado y acompañante - 2 persona(s)
-   http://localhost:4325/ilse-cespedes-rocabado
+   http://localhost:4322/ilse-cespedes-rocabado
 8. Señor Ramon Oliden Tapia y acompañante - 2 persona(s)
-   http://localhost:4325/ramon-oliden-tapia
+   http://localhost:4322/ramon-oliden-tapia
 9. Señor Teddy Baeny Suarez y esposa - 2 persona(s)
-   http://localhost:4325/teddy-baeny-suarez
+   http://localhost:4322/teddy-baeny-suarez
 10. Señorita Jessica Oliden Torrez y acompañante - 2 persona(s)
-   http://localhost:4325/jessica-oliden-torrez
+   http://localhost:4322/jessica-oliden-torrez
 11. Señora Jhonn Lucuy Tomas y esposa - 2 persona(s)
-   http://localhost:4325/jhonn-lucuy-tomas
+   http://localhost:4322/jhonn-lucuy-tomas
 12. Señor Iver Otterburg Calvo y acompañante - 2 persona(s)
-   http://localhost:4325/iver-otterburg-calvo
+   http://localhost:4322/iver-otterburg-calvo
 13. Señor Oscar Oliden Gallegos y esposa - 2 persona(s)
-   http://localhost:4325/oscar-oliden-gallegos
+   http://localhost:4322/oscar-oliden-gallegos
 14. Señor Omar Oliden Gallegos y esposa - 2 persona(s)
-   http://localhost:4325/omar-oliden-gallegos
+   http://localhost:4322/omar-oliden-gallegos
 15. Señora Rocio Oliden Gallegos - 1 persona(s)
-   http://localhost:4325/rocio-oliden-gallegos
+   http://localhost:4322/rocio-oliden-gallegos
 16. Señor Miguel Rodríguez y esposa - 2 persona(s)
-   http://localhost:4325/miguel-rodriguez
+   http://localhost:4322/miguel-rodriguez
 17. Señor Jaime Elio Calvo y esposa - 2 persona(s)
-   http://localhost:4325/jaime-elio-calvo
+   http://localhost:4322/jaime-elio-calvo
 18. Señor Federico Agramont y esposa - 2 persona(s)
-   http://localhost:4325/federico-agramont
+   http://localhost:4322/federico-agramont
 19. Señor Walter Almaraz y esposa - 2 persona(s)
-   http://localhost:4325/walter-almaraz
+   http://localhost:4322/walter-almaraz
 20. Señor Ángel Mamani y esposa - 2 persona(s)
-   http://localhost:4325/angel-mamani
+   http://localhost:4322/angel-mamani
 21. Señora Cecilia Virreira - 1 persona(s)
-   http://localhost:4325/cecilia-virreira
+   http://localhost:4322/cecilia-virreira
 22. Señora Dennisse Virreira - 1 persona(s)
-   http://localhost:4325/dennisse-virreira
+   http://localhost:4322/dennisse-virreira
 23. Señor Felix Angulo - 2 persona(s)
-   http://localhost:4325/felix-angulo
+   http://localhost:4322/felix-angulo
 24. Señor Martin Vidaurre - 1 persona(s)
-   http://localhost:4325/martin-vidaurre
+   http://localhost:4322/martin-vidaurre
 25. Señora Maria Eugenia Torrico - 1 persona(s)
-   http://localhost:4325/maria-eugenia-torrico
+   http://localhost:4322/maria-eugenia-torrico
 26. Señor Clider Gonzales Montecinos - 1 persona(s)
-   http://localhost:4325/clider-gonzales-montecinos
+   http://localhost:4322/clider-gonzales-montecinos
 27. Señor Jonathan Lucuy Tomas - 1 persona(s)
-   http://localhost:4325/jonathan-lucuy-tomas
+   http://localhost:4322/jonathan-lucuy-tomas
 28. Señor Raul Via - 1 persona(s)
-   http://localhost:4325/raul-via
+   http://localhost:4322/raul-via
 29. Señora Monica Rodrigo Severich - 1 persona(s)
-   http://localhost:4325/monica-rodrigo-severich
+   http://localhost:4322/monica-rodrigo-severich
 30. Señor Jorge Aranibar Dupleich - 1 persona(s)
-   http://localhost:4325/jorge-aranibar-dupleich
+   http://localhost:4322/jorge-aranibar-dupleich
 31. Señorita Paola Aranibar Rodrigo y acompañante - 2 persona(s)
-   http://localhost:4325/paola-aranibar-rodrigo
+   http://localhost:4322/paola-aranibar-rodrigo
 32. Señorita Eileen Aranibar Alcabes - 1 persona(s)
-   http://localhost:4325/eileen-aranibar-alcabes
+   http://localhost:4322/eileen-aranibar-alcabes
 33. Señora Ana Maria Rodrigo Severiche - 1 persona(s)
-   http://localhost:4325/ana-maria-rodrigo-severiche
+   http://localhost:4322/ana-maria-rodrigo-severiche
 34. Señor Jaime Eduardo Ponce de Leon - 1 persona(s)
-   http://localhost:4325/jaime-eduardo-ponce-de-leon
+   http://localhost:4322/jaime-eduardo-ponce-de-leon
 35. Señor Jaime Ponce de Leon Rodrigo - 1 persona(s)
-   http://localhost:4325/jaime-ponce-de-leon-rodrigo
+   http://localhost:4322/jaime-ponce-de-leon-rodrigo
 36. Señora Susana Rodrigo Severiche y esposo - 2 persona(s)
-   http://localhost:4325/susana-rodrigo-severiche
+   http://localhost:4322/susana-rodrigo-severiche
 37. Señor Jaime Cruz Rodrigo y esposa - 2 persona(s)
-   http://localhost:4325/jaime-cruz-rodrigo
+   http://localhost:4322/jaime-cruz-rodrigo
 38. Señora Monica Cruz Rodrigo y esposo - 2 persona(s)
-   http://localhost:4325/monica-cruz-rodrigo
+   http://localhost:4322/monica-cruz-rodrigo
 39. Señor Mauricio Cruz Rodrigo y esposa - 2 persona(s)
-   http://localhost:4325/mauricio-cruz-rodrigo
+   http://localhost:4322/mauricio-cruz-rodrigo
 40. Señora Cynthia Aranibar y acompañante - 2 persona(s)
-   http://localhost:4325/cynthia-aranibar
+   http://localhost:4322/cynthia-aranibar
 41. Señorita Mikaela Kordeban Aranibar y Familia - 3 persona(s)
-   http://localhost:4325/mikaela-kordeban-aranibar
+   http://localhost:4322/mikaela-kordeban-aranibar
 42. Señora Melissa kordeban de Morteo y Familia - 3 persona(s)
-   http://localhost:4325/melissa-kordeban-de-morteo
+   http://localhost:4322/melissa-kordeban-de-morteo
 43. Señor Alvaro Mier Aranibar y Familia - 4 persona(s)
-   http://localhost:4325/alvaro-mier-aranibar
+   http://localhost:4322/alvaro-mier-aranibar
 44. Señora Jessica Mier de Valle y Familia - 4 persona(s)
-   http://localhost:4325/jessica-mier-de-valle
+   http://localhost:4322/jessica-mier-de-valle
 45. Señor Jhonatan Vargas Mier y acompañante - 2 persona(s)
-   http://localhost:4325/jhonatan-vargas-mier
+   http://localhost:4322/jhonatan-vargas-mier
 46. Señora Roxana Aranibar de Soria - 1 persona(s)
-   http://localhost:4325/roxana-aranibar-de-soria
+   http://localhost:4322/roxana-aranibar-de-soria
 47. Señores Luis y Carmen kordeban - 2 persona(s)
-   http://localhost:4325/luis-y-carmen-kordeban
+   http://localhost:4322/luis-y-carmen-kordeban
 48. Señores Gabriela y Neal Walker - 2 persona(s)
-   http://localhost:4325/gabriela-y-neal-walker
+   http://localhost:4322/gabriela-y-neal-walker
 49. Señor Neal Scott Walker Rodrigo - 1 persona(s)
-   http://localhost:4325/neal-scott-walker-rodrigo
+   http://localhost:4322/neal-scott-walker-rodrigo
 50. Señorita Madeline Farina - 1 persona(s)
-   http://localhost:4325/madeline-farina
+   http://localhost:4322/madeline-farina
 51. Señora Fey Carolyn Walker - 1 persona(s)
-   http://localhost:4325/fey-carolyn-walker
+   http://localhost:4322/fey-carolyn-walker
 52. Señor Sam Learner - 1 persona(s)
-   http://localhost:4325/sam-learner
+   http://localhost:4322/sam-learner
 53. Señora Marcela Rada y esposo - 2 persona(s)
-   http://localhost:4325/marcela-rada
+   http://localhost:4322/marcela-rada
 54. Señora Ximena Rada y esposo - 2 persona(s)
-   http://localhost:4325/ximena-rada
+   http://localhost:4322/ximena-rada
 55. Señor Mauricio Taboada y Familia - 3 persona(s)
-   http://localhost:4325/mauricio-taboada
+   http://localhost:4322/mauricio-taboada
 56. Señor Juan Pablo Rodriguez - 1 persona(s)
-   http://localhost:4325/juan-pablo-rodriguez
+   http://localhost:4322/juan-pablo-rodriguez
 57. Señorita Erika Heredia Aguilar - 1 persona(s)
-   http://localhost:4325/erika-heredia-aguilar
+   http://localhost:4322/erika-heredia-aguilar
 58. Señora Gabriela Ponce de Leon Rodrigo - 1 persona(s)
-   http://localhost:4325/gabriela-ponce-de-leon-rodrigo
+   http://localhost:4322/gabriela-ponce-de-leon-rodrigo
 59. Señor Ivan Tapia y señora - 2 persona(s)
-   http://localhost:4325/ivan-tapia
+   http://localhost:4322/ivan-tapia
 60. Señor Ronald Tapia y señora - 2 persona(s)
-   http://localhost:4325/ronald-tapia
+   http://localhost:4322/ronald-tapia
 61. Señor Fernando Saavedra - 1 persona(s)
-   http://localhost:4325/fernando-saavedra
+   http://localhost:4322/fernando-saavedra
 62. Señor Víctor Hugo Almeida García y Sra. - 2 persona(s)
-   http://localhost:4325/victor-hugo-almeida-garcia
+   http://localhost:4322/victor-hugo-almeida-garcia
+63. Señor Manuel Vélez y familia - 3 persona(s)
+   http://localhost:4322/manuel-velez
+64. Señor Víctor Hugo Almeida García y esposa - 2 persona(s)
+   http://localhost:4322/victor-hugo-almeida-garcia-2
+65. Señora Gabriela Ponce de León - 2 persona(s)
+   http://localhost:4322/gabriela-ponce-de-leon
